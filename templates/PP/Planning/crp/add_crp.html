@@ -1,0 +1,550 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block header %}
+<link href="{% static 'css/scroll.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListCRP' %}">CRP</a></li>
+            <li class="active">Add CRP</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel widget">
+            <div class="panel-heading ">
+                           {% if messages %}
+            <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+            {% endif %}
+            </div>
+
+            <div class="panel-body-list">
+                <form class="form-horizontal" action="#" role="form">
+                    <div id="wizard-3" class="form-wizard condensed">
+                        <ul class="nav nav-pills nav-justified">
+                            <li><a href="#tab31" data-toggle="tab">
+                                <div class="menu-icon"> 1</div>
+                                General Data </a></li>
+                            <li><a href="#tab32" data-toggle="tab">
+                                <div class="menu-icon"> 2</div>
+                                CRP Data </a></li>
+                            <li class="active"><a href="#tab33" data-toggle="tab">
+                                <div class="menu-icon"> 3</div>
+                                Review </a></li>
+                            <!--                          <li><a href="#tab34" data-toggle="tab">
+                                                        <div class="menu-icon"> 4 </div>
+                                                      Warehouse Data </a></li>-->
+
+                        </ul>
+                        <div class="tab-content no-bd pd-25">
+                            <div class="tab-pane" id="tab31">
+
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Finished Product
+                                        No.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               placeholder="Enter finished product no."
+                                               required="required">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               placeholder="Enter Order Ref"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">OrderQTY:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               placeholder="Enter Order QTY"
+                                               required="required">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="tab32">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"> Product No.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{data.finish}}">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{data.order_ref}}">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operation List
+                                        No.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{data.order_qty}}">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Product Desc:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled"
+                                               value="160 gsm SJ finished Fabric">
+                                    </div>
+                                </div>&nbsp;
+
+                                <div class="container">
+
+                                    <div class="hack1">
+                                        <div class="hack2">
+
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Production_Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Aval Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        No of MC/RES Aval
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Aval CAP/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Reqd CAP/Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Reqd CAP/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Aval MC Hr/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Reqd MC Hr/Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Reqd MC/Hour
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Aval Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+
+                                                    <td><input type="text"
+
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="{{x.product_center_name}}"></td>
+
+
+                                                    <td><input type="text"
+
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="{{c.AvalCapOrDay}}"></td>
+
+                                                    <td><input type="text"
+
+                                                               name="row-5-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="4"></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="5"></td>
+                                                    <td><input type="text"
+
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="111"></td>
+                                                    <td><input type="text"
+
+                                                               name="row-3-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="48"></td>
+                                                    <td><input type="text"
+                                                               id="row-5-position"
+                                                               name="row-5-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-6-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-9-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               value=""></td>
+                                                    <td><input type="text"
+
+                                                               name="row-6-position"
+                                                               value=" "></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               value=""></td>
+
+
+                                                </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Pro. Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Aval Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        No of MC/RES Aval
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Aval CAP/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Reqd CAP/Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Reqd CAP/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Aval MC Hr/Day
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Reqd MC Hr/Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Reqd MC/Hour
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Aval Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="tab-pane active" id="tab33">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Product No.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{crp_track.finished.id}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{crp_track.order_ref}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operation List NO:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{crp_track.operationlist}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">MPS_CRP REF
+                                        NO:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="{{crp_track.id}}">
+                                    </div>
+                                </div>&nbsp;
+                                <div class="container">
+
+                                    <div class="hack1">
+                                        <div class="hack2">
+
+                                            <table style="width: auto">
+                                                <thead>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Production_Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for x in crp %}
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="{{x.operationSequence}}"></td>
+                                                    <td><input type="text"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="{{x.productioncneter}}"></td>
+
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="{{x.StartDate}}"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="{{x.StartTime}}"></td>
+                                                    <td><input type="text"
+
+
+                                                               disabled="disabled"
+                                                               value="{{x.EndTime}}"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="{{x.EndDate}}"></td>
+                                                    <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="{{x.NoOfMcByRes}}"></td>
+                                                     <td><input type="text"
+
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="{{x.mc_id_no}}"></td>
+
+                                                </tr>
+                                                {%endfor%}
+
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Production_Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-actions wizard mgtp-20">
+                                <div class="row mgbt-xs-0">
+                                    <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                             href="javascript:void(0);"><span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                        Previous</a></div>
+                                    <div class="col-xs-6 text-right"><a
+                                            class="btn vd_btn next"
+                                            href="javascript:void(0);">Save And Continue
+                                        <span class="menu-icon"><i
+                                                class="fa fa-fw fa-chevron-circle-right"></i></span></a>
+                                        <a class="btn vd_btn vd_bg-green finish"
+                                           href="{% url 'productionplanning:ListCRP' %}"><span class="menu-icon"><i
+                                                class="fa fa-fw fa-check"></i></span> Finish</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Panel Widget -->
+    </div>
+    <!-- col-md-12 -->
+</div>
+
+<script type="application/javascript">
+    setTimeout(function () {
+        document.getElementById("mass-sub").innerHTML = ''
+    }, 3000);
+</script>
+{% endblock %}

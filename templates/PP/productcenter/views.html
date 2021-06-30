@@ -1,0 +1,122 @@
+{% extends 'basic.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListProductCenter' %}">Product Center</a></li>
+            <li class="active">View</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General Data</strong></h3>
+
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr class="vd_navbar">
+            <th><p align="center">Product Name</p></th>
+            <th><p align="center">Division</p></th>
+            <th><p align="center">Final Output </p></th>
+            <th><p align="center">M/C Tools</p></th>
+            <th><p align="center">Responsible Per.</p></th>
+            <th><p align="center">Unit </p></th>
+            <th><p align="center">Capacity Per M/C</p></th>
+            <th><p align="center">No Of M/C</p></th>
+            <th><p align="center">Total Capacity Per Day</p></th>
+            <th><p align="center">M/C per Operator</p></th>
+            <th><p align="center">Total Operator/Day </p></th>
+            <th><p align="center">Exception msg</p></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td align="center">{{ProductCenter.product_center_name}}</td>
+            <td align="center">{{ProductCenter.division}}</td>
+            <td align="center">{{ProductCenter.final_output}}</td>
+            <td align="center">{{ProductCenter.m_by_c_or_tools}}</td>
+            <td align="center">{{ProductCenter.responsible_per}}</td>
+            <td align="center">{{ProductCenter.unit}}</td>
+            <td align="center">{{ProductCenter.capacity_per_m_by_c}}</td>
+            <td align="center">{{ProductCenter.NoOfMByC}}</td>
+            <td align="center">{{ProductCenter.total_capacity_by_day}}</td>
+            <td align="center">{{ProductCenter.m_by_c_per_operator}}</td>
+            <td align="center">{{ProductCenter.total_opeartor_by_day}}</td>
+            <td align="center">{{ProductCenter.exception_msg}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Capacity Scheduling</strong></h3>
+
+
+
+
+
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr class="vd_navbar">
+            <th><p align="center">Date</p></th>
+            <th><p align="center">AVAL CAP / DAY</p></th>
+            <th><p align="center">CAP ALLOCTD TO </p></th>
+            <th><p align="center">ALLOCTD CAP</p></th>
+            <th><p align="center">BALANCE CAP:</p></th>
+            <th><p align="center">AVAL MC/RES HOUR </p></th>
+            <th><p align="center">REQD MC/RES HOUR</p></th>
+            <th><p align="center">BAL MC/RES HOUR</p></th>
+            <th><p align="center">START TIME</p></th>
+            <th><p align="center">END TIME</p></th>
+            <th><p align="center">NO.OF MC ALLOCTD </p></th>
+
+
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for x in capacity_scheduling %}
+        <tr>
+            <td align="center">{{x.Date}}</td>
+            <td align="center">{{x.AvalCapOrDay}}</td>
+            <td align="center">{{x.CapALlloctdTo}}</td>
+            <td align="center">{{x.AlloctdCap}}</td>
+            <td align="center">{{x.BalanceCap}}</td>
+            <td align="center">{{x.AvalMcOrResHour}}</td>
+            <td align="center">{{x.ReqdMcOrResHour}}</td>
+            <td align="center">{{x.BalMcOrHour}}</td>
+            <td align="center">{{x.StartTime}}</td>
+            <td align="center">{{x.EndTime}}</td>
+            <td align="center">{{x.NoOfMCAlloctd}}</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <a href="{% url 'productionplanning:ListProductCenter' %}" class="btn btn-danger" type="submit">Cancel</a>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+

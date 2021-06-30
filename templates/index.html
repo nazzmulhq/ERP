@@ -1,0 +1,74 @@
+{% extends 'basic.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">Default Dashboard</li>
+        </ul>
+        <div class="vd_panel-menu hidden-sm hidden-xs"
+             data-intro="<strong>Expand Control</strong><br/>To expand content page horizontally, vertically, or Both. If you just need one button just simply remove the other button code."
+             data-step=5 data-position="left">
+            <div data-action="remove-navbar" data-original-title="Remove Navigation Bar Toggle"
+                 data-toggle="tooltip" data-placement="bottom"
+                 class="remove-navbar-button menu"><i class="fa fa-arrows-h"></i></div>
+            <div data-action="remove-header" data-original-title="Remove Top Menu Toggle"
+                 data-toggle="tooltip" data-placement="bottom"
+                 class="remove-header-button menu"><i class="fa fa-arrows-v"></i></div>
+            <div data-action="fullscreen"
+                 data-original-title="Remove Navigation Bar and Top Menu Toggle"
+                 data-toggle="tooltip" data-placement="bottom" class="fullscreen-button menu"><i
+                    class="glyphicon glyphicon-fullscreen"></i></div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ page_name }}</h1>
+        <small class="subtitle">{{ subpage_name }}</small>
+        <div class="vd_panel-menu  hidden-xs">
+            <div class="menu no-bg vd_red" data-original-title="Start Layout Tour Guide"
+                 data-toggle="tooltip" data-placement="bottom"
+                 onClick="javascript:introJs().setOption('showBullets', false).start();">
+                <span class="menu-icon font-md">
+                    <i class="fa fa-question-circle"></i>
+                </span>
+            </div>
+            <div class="menu">
+                <div data-action="click-trigger">
+                    <span class="menu-icon mgr-10">
+                        <i class="fa fa-filter"></i>
+                    </span>Filter <i class="fa fa-angle-down"></i>
+                </div>
+                <div class="vd_mega-menu-content width-xs-2 left-xs" data-action="click-target">
+                    <div class="child-menu">
+                        <div class="content-list content-menu">
+                            <ul class="list-wrapper pd-lr-10">
+                                <li><a href="#">
+                                    <div class="menu-icon"><i class=" fa fa-user"></i></div>
+                                    <div class="menu-text">Filter User</div>
+                                </a></li>
+                                <li><a href="#">
+                                    <div class="menu-icon"><i class=" fa fa-calendar"></i></div>
+                                    <div class="menu-text">Filter Date</div>
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}

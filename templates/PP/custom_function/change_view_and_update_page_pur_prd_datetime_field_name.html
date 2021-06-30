@@ -1,0 +1,11 @@
+<script>
+        let date_field_name = document.getElementById('id_pur_or_prd')
+        if (date_field_name.value === 'Production Date') {
+            document.getElementById('pur_or_prd_date').innerText = `${date_field_name.value}`
+        } else if (date_field_name.value === '') {
+            document.getElementById('pur_or_prd_date').innerText = `Date:`
+        } else {
+            document.getElementById('pur_or_prd_date').innerText = `${date_field_name.value}`
+        }
+
+</script>

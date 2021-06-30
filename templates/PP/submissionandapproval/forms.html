@@ -1,0 +1,184 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListSubmissionAndApproval' %}">Submission & Approval</a></li>
+            <li class="active">New Submission & Approval</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="col-md-12">
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+            <form class="form-horizontal" method="POST" role="form" >
+                {% csrf_token %}
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            Submission Data</a></li>
+                        <li><a href="#tab33" data-toggle="tab">
+                            <div class="menu-icon"> 3</div>
+                            Submission  Result/Status</a></li>
+
+                    </ul>
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Date:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.data_of_submission}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">R&D / Order Ref. No:<span class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.r_and_d_order_ref_no}}
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Product No.:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.product_no}}
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="col-sm-2 control-label">Item Description:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.item_description}}
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="col-sm-2 control-label">Color / Variety:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.color_per_variety}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab32">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Subm Product:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.submission_product}}
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Subm Type:</label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.submission_type}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Subm Item:<span
+                                        class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.submission_item}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Item Ref No.:<span
+                                        class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.item_ref_no}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="tab33">
+                             <div class="form-group">
+                                <label class="col-sm-2 control-label">Round of Submission:<span class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.round_of_submission}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Pland Subm Date:<span
+                                        class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.pland_subm_date}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Submitted Date:<span
+                                        class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.submitted_date}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Result:<span
+                                        class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.result}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Comment:<span
+                                        class="vd_red"></span> </label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.comment}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Date:<span class="vd_red"></span></label>
+                                <div class="col-sm-4 controls">
+                                    {{forms.approval_or_rejection_date}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions wizard mgtp-20">
+                            <div class="row mgbt-xs-0">
+                                <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                         href="javascript:void(0);"><span
+                                        class="menu-icon"><i
+                                        class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                    Previous</a></div>
+                                <div class="col-xs-6 text-right">
+                                    <a
+                                            class="btn vd_btn next"
+                                            href="javascript:void(0);">Next <span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-right"></i></span></a>
+                                    <button type="submit" class="btn vd_btn vd_bg-green finish"
+                                       href="javascript:void(0);"><span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-check"></i></span>Finish</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

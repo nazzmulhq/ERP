@@ -1,0 +1,194 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListCRP' %}">CRP</a></li>
+            <li class="active">Update CRP</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #ccc;
+    }
+
+    .container {
+        width: 300px;
+        background-color: white;
+
+    }
+
+    table {
+        width: 200%;
+        border-collapse: collapse;
+    }
+
+
+    /* try removing the "hack" below to see how the table overflows the .body */
+    .hack1 {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .hack2 {
+
+        display: table-cell;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+</style>
+<div class="vd_content-section clearfix">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+    {% endif %}
+    <div class="row">
+
+
+        <form class="form-horizontal" action="#" role="form">
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Product No.:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-4 controls">
+                    <input type="text" class="form-control"
+                           disabled="disabled" value="{{crp_track.finished.id}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Order REF:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-4 controls">
+                    <input type="text" class="form-control"
+                           disabled="disabled" value="{{crp_track.order_ref}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Operation List NO:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-4 controls">
+                    <input type="text" class="form-control"
+                           disabled="disabled" value="{{crp_track.operationlist}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Product Desc:<span class="vd_red">*</span></label>
+                <div class="col-sm-4 controls">
+                    <input type="text" class="form-control" disabled="disabled"
+                           value="{{crp_track.product_description}}">
+                </div>
+            </div>
+        </form>&nbsp;
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {{ formset.non_form_errors.as_ul }}
+            <div class="container">
+
+                <div class="hack1 ">
+                    <div class="hack2">
+
+                        <table>
+                            {% for form in formset.forms %}
+                            {% if forloop.first %}
+                            <thead>
+                            <tr>
+                                {% for field in form.visible_fields %}
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red "><p
+                                        align="center">{{ field.label|upper }}</p></th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            {% endif %}
+
+                            <tbody>
+
+
+                            <tbody>
+                            <tr>
+                                {% for field in form.visible_fields %}
+                                <td>
+                                    {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {{ field.errors.as_ul }}
+                                    {{ field }}
+                                </td>
+                                {% endfor %}
+                            </tr>
+
+
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            {% for form in formset.forms %}
+                            {% if forloop.first %}
+
+                            <tr>
+                                {% for field in form.visible_fields %}
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red "><p
+                                        align="center">{{ field.label|upper }}</p></th>
+                                {% endfor %}
+                            </tr>
+
+                            {% endif %}
+                            {% endfor %}
+                            </tfoot>
+                        </table>
+
+
+                    </div>
+
+                </div>
+
+            </div>&nbsp;
+            <div class="form-group">
+                <label class="col-sm-6 control-label"></label>
+                <div class="col-sm-4">
+                    <!--                      <input type="submit" name="submit" value="Update" class="btn btn-warning">-->
+                    <button type="submit" class="btn btn-warning">{{btn_name}}</button>
+                    <a href="{% url 'productionplanning:ListCRP' %}" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script type="application/javascript">
+    setTimeout(function () {
+        document.getElementById("mass-sub").innerHTML = ''
+    }, 3000);
+</script>
+{% endblock %}

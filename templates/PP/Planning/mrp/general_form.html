@@ -1,0 +1,145 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block header %}
+<link href="{% static 'css/scroll.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListMRP' %}">MRP</a></li>
+            <li class="active">Add</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="col-md-12">
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+
+            <div class="form-horizontal">
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            MRP Data </a></li>
+                        <li><a href="#tab33" data-toggle="tab">
+                            <div class="menu-icon"> 3</div>
+                            Review </a></li>
+
+
+                    </ul>
+
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <form id="general_data_form" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Date.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.data }}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.order_ref }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Finished Product
+                                        No.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.final_prod_no }}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Finished Product
+                                        Des.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.final_prod_des }}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">BOM Ref.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.bom_ref_no }}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">MRP Purpose:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.mrp_purpose }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Responsible
+                                        Dept:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.responsible_dept }}
+                                    </div>
+                                </div>
+                                <div class="form-actions  mgtp-20">
+                                    <div class="row mgbt-xs-0">
+                                        <div class="col-xs-6">
+                                            <button class="btn vd_btn prev wizard" type="submit"
+                                                    href="javascript:void(0);"><span
+                                                    class="menu-icon"><i
+                                                    class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                                Previous
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-6 text-right">
+                                            <button type="submit" class="btn btn-warning  next">Save And Continue
+                                                <span class="menu-icon"><i
+                                                        class="fa fa-fw fa-chevron-circle-right"></i></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Panel Widget -->
+</div>
+
+
+
+{% endblock %}

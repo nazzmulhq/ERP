@@ -1,0 +1,178 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block breadcrumbs %}
+
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">Raw material</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="well bs-component">
+
+    {% if messages %}
+    <span id='mass-sub'>
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                {%endif%}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {%endif%}
+            {% endfor %}
+        </span>
+    {% endif %}
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>Raw Material ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+
+
+    <div class="form-horizontal">
+
+        <fieldset>
+            <a href="{% url 'productionplanning:AddRawMaterial' %}" class="btn btn-success">Create New {{title}}</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">ID</p></th>
+                            <th><p align="center">Product Category</p></th>
+                            <th><p align="center">Product Description</p></th>
+                            <th><p align="center">Source</p></th>
+                            <th><p align="center">MRP Responsible</p></th>
+                            <th><p align="center">Warehouse Location</p></th>
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+                        <tbody id="rawData">
+                        {% for RawMaterial in RawMaterials %}
+                        <tr class="info">
+                            <td align="center">{{RawMaterial.id}}</td>
+                            <td align="center">{{RawMaterial.product_category | upper }}</td>
+                            <td align="center">{{RawMaterial.product_description | upper }}</td>
+                            <td align="center">{{RawMaterial.source | upper }}</td>
+                            <td align="center">{{RawMaterial.mrp_responsible | upper }}</td>
+                            <td align="center">{{RawMaterial.warehouse_location | upper }}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewRawMaterial' RawMaterial.id %}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopyRawMaterial' RawMaterial.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateRawMaterial' RawMaterial.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteRawMaterial' RawMaterial.id %}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let raeData;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterRawMaterial"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const RawMaterial of data.RawMaterials) {
+                        const ViewRawMaterial = "{% url 'productionplanning:ViewRawMaterial' 1 %}".replace('1', RawMaterial.id);
+                        const CopyRawMaterial = "{% url 'productionplanning:CopyRawMaterial' 1 %}".replace('1', RawMaterial.id);
+                        const UpdateRawMaterial = "{% url 'productionplanning:UpdateRawMaterial' 1 %}".replace('1', RawMaterial.id);
+                        const DeleteRawMaterial = "{% url 'productionplanning:DeleteRawMaterial' 1 %}".replace('1', RawMaterial.id);
+                        raeData = raeData + ` <tr class="info">
+                            <td align="center">${RawMaterial.id}</td>
+                            <td align="center">${RawMaterial.product_category}</td>
+                            <td align="center">${RawMaterial.product_description}</td>
+                            <td align="center">${RawMaterial.source}</td>
+                            <td align="center">${RawMaterial.mrp_responsible}</td>
+                            <td align="center">${RawMaterial.warehouse_location}</td>
+                            <td align="center">
+                                <a href="${ViewRawMaterial}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                    <a href="${CopyRawMaterial}"
+                                   class="btn btn-success "><i class="fa fa-files-o"></i></a>
+                                <a href="${UpdateRawMaterial}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+
+                                <a href="${DeleteRawMaterial}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#rawData").html(raeData);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">Raw Material ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("rawData").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+<script type="application/javascript">
+    setTimeout(function () {
+        document.getElementById("mass-sub").innerHTML = ''
+    }, 3000);
+</script>
+{% endblock %}

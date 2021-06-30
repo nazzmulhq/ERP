@@ -1,0 +1,178 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">CRP</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="well bs-component">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+    {% endif %}
+
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>CRP ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+
+    <form class="form-horizontal">
+        <fieldset>
+            <a href="{% url 'productionplanning:AddCRP' %}" class="btn btn-success">Create New CRP</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+                        <!-- <h3><b>Ordinance</b></h3> -->
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">MPS_CRP No.</p></th>
+                            <th><p align="center">finished Pro. NO</p></th>
+                            <th><p align="center">Order Ref</p></th>
+                            <th><p align="center">Order Qty</p></th>
+                            <th><p align="center">Produt Desc.</p></th>
+                            <th><p align="center">Operation List No.</p></th>
+
+
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+                        <tbody id="CRP">
+                        {% for x in crp_track%}
+                        <tr class="info">
+                            <td align="center">{{x.id}}</td>
+                            <td align="center">{{x.finished.id}}</td>
+                            <td align="center">{{x.order_ref}}</td>
+                            <td align="center">{{x.order_qty}}</td>
+                            <td align="center">{{x.product_description}}</td>
+                            <td align="center">{{x.operationlist}}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewCRP' x.id %}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopyCRP' x.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateCRP' x.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteCRP' x.id %}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let Data;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterCRP"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const CRP of data.CRPTrack) {
+                        const ViewCRP = "{% url 'productionplanning:ViewCRP' 1 %}".replace('1', CRP.id);
+                        const CopyCRP = "{% url 'productionplanning:CopyCRP' 1 %}".replace('1', CRP.id);
+                        const UpdateCRP = "{% url 'productionplanning:UpdateCRP' 1 %}".replace('1', CRP.id);
+                        const DeleteCRP = "{% url 'productionplanning:DeleteCRP' 1 %}".replace('1', CRP.id);
+                        Data = Data + ` <tr class="info">
+                            <td align="center">${CRP.id}</td>
+                            <td align="center">${CRP.finished_id}</td>
+                            <td align="center">${CRP.order_ref}</td>
+                            <td align="center">${CRP.order_qty}</td>
+                            <td align="center">${CRP.product_description}</td>
+                            <td align="center">${CRP.operationlist}</td>
+                            <td align="center">
+                                <a href="${ViewCRP}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                   <a href="${CopyCRP}"
+                                   class="btn btn-success "><i class="fa fa-files-o"></i></a>
+                                   <a href="${UpdateCRP}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="${DeleteCRP}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#CRP").html(Data);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">CRP ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("CRP").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+
+<script type="application/javascript">
+    setTimeout(function () {
+        document.getElementById("mass-sub").innerHTML = ''
+    }, 3000);
+</script>
+{% endblock %}

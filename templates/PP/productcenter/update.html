@@ -1,0 +1,270 @@
+{% extends 'basic.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListProductCenter' %}">Product Center</a></li>
+            <li class="active">Update</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="container">
+        {% if messages %}
+        <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+        {% endif %}
+
+
+        <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General Data</strong></h3>
+        <form method="POST">
+            {% csrf_token %}
+
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                <tr class="vd_navbar">
+                    <th><p align="center">Product Name</p></th>
+                    <th><p align="center">Division</p></th>
+                    <th><p align="center">Final Output </p></th>
+                    <th><p align="center">M/C Tools</p></th>
+                    <th><p align="center">Responsible Per.</p></th>
+                    <th><p align="center">Unit </p></th>
+                    <th><p align="center">Capacity Per M/C</p></th>
+                    <th><p align="center">No Of M/C</p></th>
+                    <th><p align="center">Total Capacity Per Day</p></th>
+                    <th><p align="center">M/C per Operator</p></th>
+                    <th><p align="center">Total Operator/Day </p></th>
+                    <th><p align="center">Exception msg</p></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td align="center">{{ProductCenter.product_center_name}}</td>
+                    <td align="center">{{ProductCenter.division}}</td>
+                    <td align="center">{{ProductCenter.final_output}}</td>
+                    <td align="center">{{ProductCenter.m_by_c_or_tools}}</td>
+                    <td align="center">{{ProductCenter.responsible_per}}</td>
+                    <td align="center">{{ProductCenter.unit}}</td>
+                    <td align="center">{{ProductCenter.capacity_per_m_by_c}}</td>
+                    <td align="center">{{ProductCenter.NoOfMByC}}</td>
+                    <td align="center">{{ProductCenter.total_capacity_by_day}}</td>
+                    <td align="center">{{ProductCenter.m_by_c_per_operator}}</td>
+                    <td align="center">{{ProductCenter.total_opeartor_by_day}}</td>
+                    <td align="center">{{ProductCenter.exception_msg}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <button class="btn btn-success" type="submit">{{btn_name}}</button>
+            </div>
+        </form>
+
+        <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Capacity Scheduling</strong></h3>
+
+        <form method="POST" action="{% url 'productionplanning:UpdateCapacityScheduling' id %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {{ formset.non_form_errors.as_ul }}
+            <table class="table table-bordered table-hover table-condensed">
+                {% for form in formset.forms %}
+                {% if forloop.first %}
+                <thead>
+                <tr class="vd_navbar">
+                    {% for field in form.visible_fields %}
+                    <th><p align="center">{{ field.label|upper }}</p></th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                {% endif %}
+                <tr>
+                    {% for field in form.visible_fields %}
+                    <td>
+                        {% if forloop.first %}
+                        {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                        {% endfor %}
+                        {% endif %}
+                        {{ field.errors.as_ul }}
+                        {{ field }}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+
+            </table>
+
+            {% if btn_name == 'Copy'%}
+            {% else %}
+            <div class="text-center">
+                <button class="btn btn-success" type="submit">Update</button>
+            </div>
+            {% endif %}
+        </form>
+        <div class="row">
+
+            <div class="container">
+                <button type="button" class="collapsible btn btn-success">Add New Capacity Scheduling</button>
+                <div style="display: none;overflow: hidden;">
+
+                    <form method="POST" class="form-horizontal col-sm-12">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+
+                            <label class="control-label  col-sm-4">Date:<span
+                                    class="vd_red">*</span></label>
+                            <div class="controls col-sm-4">
+                                {{CapacitySchedulingForm.Date}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Aval Cap/Day
+                                <span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.AvalCapOrDay}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Cap allocated
+                                To: <span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.CapALlloctdTo}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Allocated Cap<span
+                                    class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.AlloctdCap}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Balance
+                                Cap<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.BalanceCap}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Aval MC/Res
+                                Hour<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.AvalMcOrResHour}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Req MC/Res
+                                Hour<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.ReqdMcOrResHour}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Bal MC/Res
+                                Hour<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.BalMcOrHour}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">Start
+                                Time<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.StartTime}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-4">End Time<span
+                                    class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.EndTime}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">No of MC
+                                Allocated<span class="vd_red">*</span></label>
+                            <div
+                                    class="controls col-sm-4">
+                                {{CapacitySchedulingForm.NoOfMCAlloctd}}
+                            </div>
+                        </div>
+
+
+                        <div class="wrapper" style="text-align: center">
+                            <button type="submit" class="btn btn-primary ">Add <span
+                                    class="menu-icon"><i
+                                    class="fa fa-fw fa-chevron-circle-right"></i></span>
+                            </button>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+
+</script>
+
+{% endblock %}

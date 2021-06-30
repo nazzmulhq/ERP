@@ -1,0 +1,242 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block header %}
+<link href="{% static 'css/scroll.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListMRP' %}">MRP</a></li>
+            <li class="active">Update</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="vd_content-section clearfix">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+    </span>
+    {% endif %}
+    <div class="row">
+
+        <form class="form-horizontal" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-sm-2 control-label"> Date.:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.data}}
+                </div>
+                <label class="col-sm-2 control-label"> Order Ref.:<span class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.order_ref}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Finished Product No.:<span class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.final_prod_no}}
+                </div>
+                <label class="col-sm-2 control-label">Finished Product Des.:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.final_prod_des}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">MRP Purpose:<span class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.mrp_purpose}}
+                </div>
+                <label class="col-sm-2 control-label">BOM Ref:<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.bom_ref_no}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Responsible Dept<span
+                        class="vd_red">*</span></label>
+                <div class="col-sm-3 controls">
+                    {{gmrpform.responsible_dept}}
+                </div>
+                <p class="col-sm-2 control-label">MRP No.:<span
+                        class="vd_red">*</span></p>
+                <div class="col-sm-3 controls">
+                    <p class="form-control" style=" background-color: white;">{{id}}</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">{{btn_name}}</button>
+            </div>
+
+
+        </form>&nbsp;
+
+
+        <div class="container">
+            <form method="POST" action="{% url 'productionplanning:UpdateMRP' id %}">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {{ formset.non_form_errors.as_ul }}
+                <div class="hack1">
+                    <div class="hack2">
+
+                        <table>
+                            <thead>
+                            <tr>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Com Product No.
+                                </th>
+
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Comp Desc.
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Unit
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Required QTY
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Total Reqd QTY
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Required Date
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Source
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Source Name
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Action Required
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Status
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Time To Get
+                                </th>
+                            </tr>
+                            </thead>
+                            {% for form in formset.forms %}
+
+                            <tbody>
+                            <tr>
+                                {% for field in form.visible_fields %}
+                                <td>
+                                    {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {{ field.errors.as_ul }}
+                                    {{ field }}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Com Product No.
+                                </th>
+
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Comp Desc.
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Unit
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Required QTY
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Total Reqd QTY
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Required Date
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Source
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Source Name
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Action Required
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                    Status
+                                </th>
+                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                    Time To Get
+                                </th>
+
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-6 control-label"></label>
+                    <div class="col-sm-4">
+                        <!--                      <input type="submit" name="submit" value="Update" class="btn btn-warning">-->
+                        {% if btn_name == 'Copy'%}
+                        {% else %}
+                            <button class="btn btn-success" type="submit">{{btn_name}}</button>
+                        <a href="{% url 'productionplanning:ListMRP' %}" class="btn btn-danger">Cancel</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+<script type="application/javascript">
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+</script>
+{% endblock %}

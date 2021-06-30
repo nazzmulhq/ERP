@@ -1,0 +1,372 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListOperationList' %}">Operation List</a></li>
+            <li class="active">Add Operation List</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+
+<div class="col-md-12">
+    <span id='mass-sub'></span>
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+            <div class="form-horizontal" role="form">
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            Operation Data </a></li>
+                    </ul>
+
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <form method="POST" id="OperationListForm">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Date Of
+                                        Creation:</label>
+                                    <div class="col-sm-4">
+                                        {{OperationListForms.dataOfcreation}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Usage :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4">
+                                        {{OperationListForms.usage}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Product Catagory.
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4">
+                                        {{OperationListForms.productioncategory}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Product Desc
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{OperationListForms.productdescription}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Responsible
+                                        Dept:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{OperationListForms.responsibledept}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Previous Ref
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{OperationListForms.previousref}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Order Ref :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{OperationListForms.orderref}}
+                                    </div>
+                                </div>
+                                <div style="text-align: right">
+                                    <button type="submit"
+                                       class="btn next btn-success"
+                                         >Next <span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-right"></i></span></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="tab32">
+                            <h1 class="text-center">First Add General Data</h1>
+<!--                            <div class="col-12 d-inline-flex">-->
+<!--                                <div class="col-8 p-4">-->
+<!--                                    <h3 style="background-color:#E5E5E5; padding:10px"><strong>Operation List:</strong>-->
+<!--                                    </h3>-->
+<!--                                    <table class="table table-bordered table-hover table-condensed"-->
+<!--                                           id="myTable1" style="margin-bottom: 10px">-->
+<!--                                        <thead>-->
+<!--                                        <tr class="vd_navbar">-->
+<!--                                            <th><p align="center">Operation List No.</p></th>-->
+<!--                                            <th><p align="center">Date Of Creation</p></th>-->
+<!--                                            <th><p align="center">Usage</p></th>-->
+<!--                                            <th><p align="center">Product Cat</p></th>-->
+<!--                                            <th><p align="center">Resp Dept</p></th>-->
+<!--                                        </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody id="tbody1">-->
+
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="col-12 d-inline-flex">-->
+<!--                                <div class="col-8 p-4">-->
+<!--                                    <h3 style="background-color:#E5E5E5; padding:10px"><strong>Operation-->
+<!--                                        Sequence:</strong></h3>-->
+<!--                                    <table class="table table-bordered table-hover table-condensed"-->
+<!--                                           id="myTable">-->
+<!--                                        <thead>-->
+<!--                                        <tr class="vd_navbar">-->
+
+
+<!--                                            <th><p align="center">Operation Sequence</p></th>-->
+<!--                                            <th><p align="center">Standard Time</p></th>-->
+<!--                                            <th><p align="center">Allowance Time</p></th>-->
+<!--                                            <th><p align="center">Total Time</p></th>-->
+<!--                                        </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody id="tbody">-->
+
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <button type="button" class="collapsible btn btn-success" style="margin-top: 20px">Add-->
+<!--                                Operation-->
+<!--                                Sequence-->
+<!--                            </button>-->
+
+<!--                            <div style="display: none;overflow: hidden;">-->
+<!--                                <div class="content">-->
+<!--                                    <form id="OperationSequenceForms" method="POST">-->
+<!--                                        {% csrf_token %}-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Operation-->
+<!--                                                Sequence: <span-->
+<!--                                                        class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4">-->
+<!--                                                {{OperationSequenceForms.operationSequence}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Production Center: <span-->
+<!--                                                    class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4">-->
+<!--                                                {{OperationSequenceForms.production_center}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+
+
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Base Unit:<span-->
+<!--                                                    class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.baseunit}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Req-->
+<!--                                                Cap/Unit:<span-->
+<!--                                                        class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.reqdcapunit}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Standard-->
+<!--                                                Time:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.standardtime}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Allowance-->
+<!--                                                Time:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.allowancetime}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Total-->
+<!--                                                Time:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.totaltime}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Components-->
+<!--                                                User:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.componentsuser}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Tools-->
+<!--                                                Required:<span-->
+<!--                                                        class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.toolsrequired}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Inspection-->
+<!--                                                Center:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.inspectioncenter}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label class="col-sm-3 control-label">Exception-->
+<!--                                                Msg:<span class="vd_red">*</span></label>-->
+<!--                                            <div class="col-sm-4 controls">-->
+<!--                                                {{OperationSequenceForms.exceptionmsg}}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div style="text-align: center">-->
+<!--                                            <button type="button" id="OperationSequence"-->
+<!--                                                    class="collapsible btn btn-success">Next <span-->
+<!--                                            class="menu-icon"><i-->
+<!--                                            class="fa fa-fw fa-chevron-circle-right"></i></span>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                        <div style="text-align: right">-->
+<!--                                            <a type="button" href="{% url 'productionplanning:ListOperationList' %}"-->
+<!--                                               class="collapsible btn btn-info">Finish-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div style="text-align: left">-->
+<!--                                            <a type="button" href="{% url 'productionplanning:ListOperationList' %}"-->
+<!--                                               class="collapsible btn btn-danger">Close-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<script>-->
+<!--    var coll = document.getElementsByClassName("collapsible");-->
+<!--    var i;-->
+
+<!--    for (i = 0; i < coll.length; i++) {-->
+<!--        coll[i].addEventListener("click", function () {-->
+<!--            this.classList.toggle("active");-->
+<!--            var content = this.nextElementSibling;-->
+<!--            if (content.style.display === "block") {-->
+<!--                content.style.display = "none";-->
+<!--            } else {-->
+<!--                content.style.display = "block";-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+<!--<script src="{% static 'jquery/jquery.min.js' %}">-->
+
+<!--</script>-->
+
+
+<!--<script type="text/javascript">-->
+<!--    $('#OperationList').click(function (e) {-->
+<!--        e.preventDefault();-->
+<!--        let OperationList = ''-->
+<!--        $.ajax({-->
+<!--            url: "{% url 'productionplanning:AddOperationList' %}",-->
+<!--            method: 'POST',-->
+<!--            data: $('#OperationListForm').serialize(),-->
+<!--            success: function (data) {-->
+
+<!--                if (data.mass === 'success') {-->
+<!--                    console.log(data)-->
+<!--                    let OperationLists = data.operation_list-->
+
+<!--                    for (let i = 0; i < OperationLists.length; i++) {-->
+<!--                        OperationList += `<tr>-->
+<!--                                <td align="center">${OperationLists[i].id}</td>-->
+<!--                                <td align="center">${OperationLists[i].dataOfcreation}</td>-->
+<!--                                <td align="center">${OperationLists[i].usage}</td>-->
+<!--                                <td align="center">${OperationLists[i].productioncategory}</td>-->
+<!--                                <td align="center">${OperationLists[i].responsibledept}</td>-->
+<!--                            </tr>`-->
+<!--                    }-->
+<!--                    document.getElementById("mass-sub").innerHTML = `<div class="alert alert-success" role="alert">${data.mass}</div>`-->
+
+<!--                    $('#tbody1').html(OperationList)-->
+<!--                    $('#OperationSequenceForms')[0].reset();-->
+<!--                    setTimeout(function () {-->
+<!--                        document.getElementById("mass-sub").innerHTML = ''-->
+<!--                    }, 3000);-->
+<!--                }-->
+
+<!--            }-->
+<!--        });-->
+
+<!--    })-->
+
+<!--    $('#OperationSequence').click(function (e) {-->
+
+<!--        e.preventDefault();-->
+<!--        let OperationSequences = ''-->
+<!--        $.ajax({-->
+<!--            url: "{% url 'productionplanning:AddOperationList' %}",-->
+<!--            method: 'POST',-->
+<!--            data: $('#OperationSequenceForms').serialize(),-->
+<!--            success: function (data) {-->
+
+<!--                if (data.mass === 'success') {-->
+<!--                    let OperationSequence = data.operation_sequence-->
+
+<!--                    for (let i = 0; i < OperationSequence.length; i++) {-->
+<!--                        OperationSequences += `<tr>-->
+
+
+<!--                                <td align="center">${OperationSequence[i].operationSequence}</td>-->
+<!--                                <td align="center">${OperationSequence[i].standardtime}</td>-->
+<!--                                <td align="center">${OperationSequence[i].allowancetime}</td>-->
+<!--                                <td align="center">${OperationSequence[i].totaltime}</td>-->
+<!--                            </tr>`-->
+<!--                    }-->
+<!--                    $('#tbody').html(OperationSequences)-->
+<!--                    $('#OperationSequenceForms')[0].reset();-->
+<!--                    document.getElementById("mass-sub").innerHTML = `<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>`-->
+<!--                    setTimeout(function () {-->
+<!--                        document.getElementById("mass-sub").innerHTML = ''-->
+<!--                    }, 3000);-->
+<!--                }-->
+
+
+<!--            }-->
+<!--        });-->
+
+<!--    })-->
+<!--</script>-->
+
+
+{% endblock %}

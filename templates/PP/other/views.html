@@ -1,0 +1,243 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListOther' %}">Other</a></li>
+            <li class="active">View</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<form class="form-" method="POST" name="form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Product No :</label>
+        <div class="col-sm-4">
+            <input type="text" name="quantity" class="form-control" value={{id}} required="required" readonly>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Product Catagory :</label>
+        <div class="col-sm-4">
+            {{ forms.product_category }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Product description :</label>
+        <div class="col-sm-4">
+            {{ forms.product_description }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">unit :</label>
+        <div class="col-sm-4">
+            {{ forms.unit }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Price/unit :</label>
+        <div class="col-sm-2 controls">
+            {{forms.price}}
+        </div>
+        <div class="col-sm-2 controls">
+
+            {{forms.price_unit}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Pur/Prd :</label>
+        <div class="col-sm-4">
+            {{ forms.pur_or_prd }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label" id="pur_or_prd_date">Date :</label>
+        <div class="col-sm-4 controls">
+            {{forms.date_0f_pur_or_prd}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Source:</label>
+        <div class="col-sm-4">
+            {{ forms.source }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Previous Ref:</label>
+        <div class="col-sm-4">
+            {{ forms.previous_ref }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Lead Time :</label>
+        <div class="col-sm-4">
+            {{ forms.lead_time }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Responsible Dept :</label>
+        <div class="col-sm-4">
+            {{ forms.responsible_dept }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Usages Ref :</label>
+        <div class="col-sm-4">
+            {{ forms.usage_ref }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Lab Ref :</label>
+        <div class="col-sm-4">
+            {{forms.lab_ref}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">R & D Ref :</label>
+        <div class="col-sm-4">
+            {{forms.r_and_d_ref}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">MRP Resp :</label>
+        <div class="col-sm-4">
+            {{ forms.mrp_responsible }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Production Resp. :</label>
+        <div class="col-sm-4">
+            {{forms.product_resp}}
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Lot size :</label>
+        <div class="col-sm-4">
+            {{ forms.lot_size }}
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Inspection
+            Ref:<span class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.inspection_ref}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Operations List ID:</label>
+        <div class="col-sm-4 controls">
+            {{forms.operations_list}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">BOM Ref:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.bom_ref}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Prod Center:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.prod_center}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Old Operation List Ref.:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.old_operation_list_ref}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Allowance:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.allowance}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Warehouse Location :</label>
+        <div class="col-sm-4">
+            {{ forms.warehouse_location }}
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Packing
+            Inst.:<span class="vd_red">*</span> </label>
+        <div class="col-sm-4 ">
+            {{forms.packing_instruction}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Shipping
+            Unit:<span class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.shipping_unit}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">QTY/Unit:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.qty_or_unit}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Gross Weight:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.gross_wt}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Net Weight:<span
+                class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.net_wt}}
+
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Storage
+            Instruction:<span class="vd_red">*</span></label>
+        <div class="col-sm-4 ">
+            {{forms.storage_instruction}}
+
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label"></label>
+        <div class="col-sm-4">
+            <a href="{% url 'productionplanning:ListOther' %}" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+
+</form>
+{% include '../custom_function/change_view_and_update_page_pur_prd_datetime_field_name.html' %}
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block header %}
+<link href="{% static 'css/scroll.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">MRP</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="vd_content-section clearfix">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+    {% endif %}
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>MRP ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+    <div class="row">
+        <div class="well bs-component">
+            <form class="form-horizontal">
+                <fieldset>
+
+
+                    <a href="{% url 'productionplanning:PostMRPGeneral' %}" class="btn btn-success">Create New MRP</a>
+                    <br><br>
+                    <div class="table-responsive">
+                        <form method="post" action="">
+                            <table class="table table-bordered table-hover table-condensed"
+                                   id="myTable">
+                                <!-- <h3><b>Ordinance</b></h3> -->
+                                <thead>
+                                <tr class="info">
+                                    <th><p align="center">MRP ID</p></th>
+                                    <th><p align="center">Order Ref.</p></th>
+                                    <th><p align="center">MRP Purpose</p></th>
+                                    <th><p align="center">responsible Dept</p></th>
+                                    <th><p align="center">Finished Pro No</p></th>
+                                    <th><p align="center">BOM Ref</p></th>
+                                    <th><p align="center">Date</p></th>
+                                    <th><p align="center">Action</p></th>
+                                </tr>
+                                </thead>
+                                <tbody id="MRP">
+                                {% for x in gmrp %}
+
+                                <tr class="info">
+                                    <td align="center">{{x.id}}</td>
+                                    <td align="center">{{x.order_ref}}</td>
+                                    <td align="center">{{x.mrp_purpose}}</td>
+                                    <td align="center">{{x.responsible_dept}}</td>
+                                    <td align="center">{{x.final_prod_no}}</td>
+                                    <td align="center">{{x.bom_ref_no}}</td>
+                                    <td align="center">{{x.data}}</td>
+                                    <td align="center">
+                                        <a href="{% url 'productionplanning:ViewMRP' x.id %}"
+                                           class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'productionplanning:CopyMRP' x.id %}"
+                                           class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                        <a href="{% url 'productionplanning:UpdateMRP' x.id %}"
+                                           class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                        <a href="{% url 'productionplanning:DeleteMRP' x.id %}"
+                                           class="btn btn-danger"><i class="fa fa-close "></i></a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </form>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let Data;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterMRP"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const MRP of data.MRPGeneralData) {
+                        const ViewMRP = "{% url 'productionplanning:ViewMRP' 1 %}".replace('1', MRP.id);
+                        const CopyMRP = "{% url 'productionplanning:CopyMRP' 1 %}".replace('1', MRP.id);
+                        const UpdateMRP = "{% url 'productionplanning:UpdateMRP' 1 %}".replace('1', MRP.id);
+                        const DeleteMRP = "{% url 'productionplanning:DeleteMRP' 1 %}".replace('1', MRP.id);
+                        Data = Data + ` <tr class="info">
+                                    <td align="center">${MRP.id}</td>
+                                    <td align="center">${MRP.order_ref}</td>
+                                    <td align="center">${MRP.mrp_purpose}</td>
+                                    <td align="center">${MRP.responsible_dept}</td>
+                                    <td align="center">${MRP.final_prod_no}</td>
+                                    <td align="center">${MRP.bom_ref_no}</td>
+                                    <td align="center">${MRP.data}</td>
+                                    <td align="center">
+                                        <a href="${ViewMRP}"
+                                           class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                           <a href="${CopyMRP}"
+                                   class="btn btn-success "><i class="fa fa-files-o"></i></a>
+                                           <a href="${UpdateMRP}"
+                                           class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                        <a href="${DeleteMRP}"
+                                           class="btn btn-danger"><i class="fa fa-close "></i></a>
+                                    </td>
+                        </tr>`
+                    }
+                    $("#MRP").html(Data);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">MRP ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("MRP").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+
+<script type="text/javascript">
+
+    function display() {
+        document.getElementById("general_data_form").submit();
+    }
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+</script>
+{% endblock %}

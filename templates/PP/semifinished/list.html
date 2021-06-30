@@ -1,0 +1,176 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">Semi Finished</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="well bs-component">
+    {% if messages %}
+    <span id='mass-sub'>
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                {%endif%}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {%endif%}
+            {% endfor %}
+        </span>
+    {% endif %}
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>Semi Finished ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+
+    <div class="form-horizontal">
+        <fieldset>
+            <a href="{% url 'productionplanning:AddSemiFinished' %}" class="btn btn-success">Create New {{title}}</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">Id/Name</p></th>
+                            <th><p align="center">Category</p></th>
+                            <th><p align="center">Unit</p></th>
+                            <th><p align="center">BOM Ref</p></th>
+                            <th><p align="center">Source</p></th>
+                            <th><p align="center">MRP resp.</p></th>
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+                        <tbody id="SemiFinished">
+                        {% for product in products %}
+                        <tr class="info">
+                            <td align="center">{{product.id  }}</td>
+                            <td align="center">{{product.product_category  }}</td>
+                            <td align="center">{{product.unit  }}</td>
+                            <td align="center">{{product.bom_ref.id  }}</td>
+                            <td align="center">{{product.source  }}</td>
+                            <td align="center">{{product.mrp_responsible }}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewSemiFinished' product.id %}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopySemiFinished' product.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateSemiFinished' product.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteSemiFinished' product.id %}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let Data;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterSemiFinished"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const SemiFinished of data.SemiFinisheds) {
+                        const ViewSemiFinished = "{% url 'productionplanning:ViewSemiFinished' 1 %}".replace('1', SemiFinished.id);
+                        const CopySemiFinished = "{% url 'productionplanning:CopySemiFinished' 1 %}".replace('1', SemiFinished.id);
+                        const UpdateSemiFinished = "{% url 'productionplanning:UpdateSemiFinished' 1 %}".replace('1', SemiFinished.id);
+                        const DeleteSemiFinished = "{% url 'productionplanning:DeleteSemiFinished' 1 %}".replace('1', SemiFinished.id);
+                        Data = Data + ` <tr class="info">
+                            <td align="center">${SemiFinished.id}</td>
+                            <td align="center">${SemiFinished.product_category}</td>
+                            <td align="center">${SemiFinished.unit}</td>
+                            <td align="center">${SemiFinished.bom_ref_id}</td>
+                            <td align="center">${SemiFinished.source}</td>
+                            <td align="center">${SemiFinished.mrp_responsible}</td>
+                            <td align="center">
+                                <a href="${ViewSemiFinished}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="${CopySemiFinished}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                   <a href="${UpdateSemiFinished}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="${DeleteSemiFinished}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#SemiFinished").html(Data);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">Semi Finished ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("SemiFinished").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+<script type="application/javascript">
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListBOM' %}">BOM</a></li>
+            <li class="active">View</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>BOM view</strong></h3>
+
+
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr class="vd_navbar">
+            <th><p align="center">Bom Ref No:</p></th>
+            <th><p align="center">Purpose Of
+                Bom</p></th>
+            <th><p align="center">Final
+                Product </p></th>
+            <th><p align="center">Unit Of Meas</p></th>
+            <th><p align="center">Order Ref.</p></th>
+            <th><p align="center">Responsible Dept</p></th>
+            <th><p align="center">Valid From</p></th>
+            <th><p align="center">Valid To</p></th>
+            <th><p align="center">Options/Old Bom</p></th>
+            <th><p align="center">Lab Ref.</p></th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td align="center">{{Bom.id}}</td>
+            <td align="center">{{Bom.purpose_of_bom}}</td>
+            <td align="center">{{Bom.final_product}}</td>
+            <td align="center">{{Bom.unit_of_meas}}</td>
+            <td align="center">{{Bom.order_ref}}</td>
+            <td align="center">{{Bom.responsible_dept}}</td>
+            <td align="center">{{Bom.valid_from}}</td>
+            <td align="center">{{Bom.valid_to}}</td>
+            <td align="center">{{Bom.options_or_old_bom}}</td>
+            <td align="center">{{Bom.labref}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Raw Material</strong></h3>
+
+
+
+
+    <table class="table table-bordered table-hover table-condensed"
+           id="myTable">
+        <thead>
+        <tr class="vd_navbar">
+            <th><p align="center">Product Category</p></th>
+            <th><p align="center">Product Description </p></th>
+            <th><p align="center">Unit</p></th>
+            <th><p align="center">Qty Required</p></th>
+            <th><p align="center">Assigned Stroe</p></th>
+            <th><p align="center">Status </p></th>
+
+
+        </tr>
+        </thead>
+
+        <tbody id="tbody">
+            {% for value in BomAndRowMaterial %}
+        <tr>
+            <td align="center">{{value.product_category}}</td>
+            <td align="center">{{value.product_description}}</td>
+            <td align="center">{{value.unit}}</td>
+            <td align="center">{{value.qty_required}}</td>
+            <td align="center">{{value.assigned_stroe}}</td>
+            <td align="center">{{value.status}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'productionplanning:ListBOM' %}" class="btn btn-danger" type="submit">Cancel</a>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,1070 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListCRP' %}">CRP</a></li>
+            <li class="active">Add CRP</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #ccc;
+    }
+
+    .container {
+        width: 300px;
+        background-color: white;
+
+    }
+
+    table {
+        width: 200%;
+        border-collapse: collapse;
+    }
+
+
+    /* try removing the "hack" below to see how the table overflows the .body */
+    .hack1 {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .hack2 {
+
+        display: table-cell;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel widget">
+            <div class="panel-heading vd_bg-grey">
+                <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+            </div>
+            <div class="panel-body-list">
+                <div class="form-horizontal" action="#" role="form">
+                    <div id="wizard-3" class="form-wizard condensed">
+                        <ul class="nav nav-pills nav-justified">
+                            <li><a href="#tab31" data-toggle="tab">
+                                <div class="menu-icon"> 1</div>
+                                General Data </a></li>
+                            <li><a href="#tab32" data-toggle="tab">
+                                <div class="menu-icon"> 2</div>
+                                CRP Data </a></li>
+                            <li><a href="#tab33" data-toggle="tab">
+                                <div class="menu-icon"> 3</div>
+                                Review </a></li>
+                            <!--                          <li><a href="#tab34" data-toggle="tab">
+                                                        <div class="menu-icon"> 4 </div>
+                                                      Warehouse Data </a></li>-->
+
+                        </ul>
+                        <div class="tab-content no-bd pd-25">
+                            <div class="tab-pane" id="tab31">
+                                <form method="POST">
+                                    {%csrf_token%}
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Finished Product
+                                            No.:<span class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            <input id="finished_no" name="finished_no" type="text" class="form-control"
+                                                   placeholder="Enter finished product no."
+                                                   required="required">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Order REF:<span
+                                                class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            <input id="order_ref" name="order_ref" type="text" class="form-control"
+                                                   placeholder="Enter Order Ref"
+                                                   required="required">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">OrderQTY:<span
+                                                class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            <input id="order_qty" name="order_qty" type="text" class="form-control"
+                                                   placeholder="Enter Order QTY"
+                                                   required="required">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="tab32">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"> Product No.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input id="id_finished" type="text" class="form-control"
+                                               disabled="disabled" value="">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input id="id_order" type="text" class="form-control"
+                                               disabled="disabled" value="">
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operation List
+                                        No.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input id="id_operation" type="text" class="form-control"
+                                               disabled="disabled" value="">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Product Desc:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input id="id_productdesc" type="text" class="form-control"
+                                               disabled="disabled"
+                                               value="">
+                                    </div>
+                                </div>&nbsp;
+
+                                <div class="container">
+                                    <form method="POST" id="crp">
+                                        {% csrf_token %}
+                                        <div class="hack1">
+                                            <div class="hack2">
+
+
+                                                <table>
+                                                    <thead>
+                                                    <tr>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Op. Sequence
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Production_Center
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Aval Start Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Start Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            No of MC/RES Aval
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Aval CAP/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Reqd CAP/Unit
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Reqd CAP/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Aval MC Hr/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Reqd MC Hr/Unit
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Reqd MC/Hour
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Aval Start Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Start Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            End Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            End Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            No. Of MC/Res
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            MC ID
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-info">
+
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Op. Sequence
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Pro. Center
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Aval Start Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Start Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            No of MC/RES Aval
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Aval CAP/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Reqd CAP/Unit
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Reqd CAP/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Aval MC Hr/Day
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Reqd MC Hr/Unit
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Reqd MC/Hour
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            Aval Start Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            Start Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            End Time
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                            End Date
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            No. Of MC/Res
+                                                        </th>
+                                                        <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                            MC ID
+                                                        </th>
+
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                        <span id="crps"></span>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                            <div class="tab-pane" id="tab33">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Product No.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="F2230">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="ABCD 111">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operation List NO:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="O1012">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">MPS_CRP REF
+                                        NO:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        <input type="text" class="form-control"
+                                               disabled="disabled" value="MPS1001">
+                                    </div>
+                                </div>&nbsp;
+                                <div class="container">
+
+                                    <div class="hack1">
+                                        <div class="hack2">
+
+                                            <table style="width: auto">
+                                                <thead>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Production_Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="row-1-position"
+                                                               name="row-1-position"
+                                                               disabled="disabled"
+                                                               value="Set-up/fitting"></td>
+                                                    <td><input type="text"
+                                                               id="row-3-position"
+                                                               name="row-3-position"
+                                                               disabled="disabled"
+                                                               value="Pc_Fitter"></td>
+                                                    <td><input type="text"
+                                                               id="row-4-position"
+                                                               name="row-4-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="00.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-9-position"
+                                                               name="row-9-position"
+                                                               disabled="disabled"
+                                                               value="12.00.00"></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1-Mar"></td>
+                                                    <td><input type="text"
+                                                               id="row-6-position"
+                                                               name="row-6-position"
+                                                               disabled="disabled"
+                                                               value="2 "></td>
+                                                    <td><input type="text"
+                                                               id="row-7-position"
+                                                               name="row-7-position"
+                                                               disabled="disabled"
+                                                               value="1"></td>
+
+                                                </tr>
+
+
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Op. Sequence
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Production_Center
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Start Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        End Time
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        End Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        No. Of MC/Res
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        MC ID
+                                                    </th>
+
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div id="crp-btn" class="form-actions wizard mgtp-20">
+                                <div class="row mgbt-xs-0">
+                                    <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                             href="javascript:void(0);"><span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                        Previous</a></div>
+                                    <div class="col-xs-6 text-right"><a
+                                            id="general-form-0"
+                                            class="btn vd_btn next"
+                                            href="javascript:void(0);">Save And Continue
+                                        <span class="menu-icon"><i
+                                                class="fa fa-fw fa-chevron-circle-right"></i></span></a>
+                                        <a class="btn vd_btn vd_bg-green finish"
+                                           href="crp.html"><span class="menu-icon"><i
+                                                class="fa fa-fw fa-check"></i></span> Finish</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Panel Widget -->
+    </div>
+    <!-- col-md-12 -->
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+<script type="text/javascript">
+    $("#general-form-0").click(function () {
+
+
+        $.ajax({
+            url: '{% url "productionplanning:AddCRP"%}',
+            method: 'POST',
+            data: {
+                finished_no: $('#finished_no').val(),
+                order_ref: $('#order_ref').val(),
+                order_qty: $('#order_qty').val(),
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: (data) => {
+                if (data.mass === "success") {
+
+                    operation_scheduling = data.operation_scheduling
+                    const crp = data.crps
+                    CRPTrack = data.CRPTrack[0]
+
+
+                    $(`#id_finished`).val(CRPTrack.finished_id);
+                    $(`#id_order`).val(CRPTrack.order_ref);
+                    $(`#id_operation`).val(CRPTrack.operationlist);
+                    $(`#id_productdesc`).val(CRPTrack.product_description);
+
+                    let table = null
+                    for (let i = 0; i < operation_scheduling.length; i++) {
+                        table = table + `<tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                      <input type="hidden"
+                                                    class="crp_track"
+                                                               id="crp_track${i}"
+                                                               name="crp_track"
+                                                               readonly
+                                                               value="${CRPTrack.id}">
+                                                    <td><input type="text"
+                                                    class="operationSequence"
+                                                               id="operationSequence${i}"
+                                                               name="operationSequence"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="production_center"
+                                                               id="production_center${i}"
+                                                               name="productioncneter"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="AvalStartDate"
+                                                               id="AvalStartDate${i}"
+                                                               name="AvalStartDate"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="Date"
+                                                    class="StartDate"
+                                                               id="StartDate${i}"
+                                                               name="StartDate"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="NoOfMCByResAval"
+                                                               id="NoOfMCByResAval${i}"
+                                                               name="NoOfMCByResAval"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="AvalCAPByDay"
+                                                               id="AvalCAPByDay${i}"
+                                                               name="AvalCAPByDay"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="reqdcapunit"
+                                                               id="reqdcapunit${i}"
+                                                               name="reqdcapunit"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="ReqdCAPByDay"
+                                                               id="ReqdCAPByDay${i}"
+                                                               name="ReqdCAPByDay"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="AvalMcHrOrDay"
+                                                               id="AvalMcHrOrDay${i}"
+                                                               name="AvalMcHrOrDay"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="ReqdMcHrByUnit"
+                                                               id="ReqdMcHrByUnit${i}"
+                                                               name="ReqdMcHrByUnit"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="ReqdMcHour"
+                                                               id="ReqdMcHour${i}"
+                                                               name="ReqdMcHour"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="AvalStartTime"
+                                                               id="AvalStartTime${i}"
+                                                               name="AvalStartTime"
+                                                               readonly
+                                                               value=""></td>
+                                                    <td><input type="time"
+                                                    class="StartTime"
+                                                               id="StartTime${i}"
+                                                               name="StartTime"
+                                                               value=""></td>
+                                                    <td><input type="time"
+                                                    class="EndTime"
+                                                               id="EndTime${i}"
+                                                               name="EndTime"
+                                                               value=""></td>
+                                                    <td><input type="date"
+                                                    class="EndDate"
+                                                               id="EndDate${i}"
+                                                               name="EndDate"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="NoOfMcByRes"
+                                                               id="NoOfMcByRes${i}"
+                                                               name="NoOfMcByRes"
+                                                               value=""></td>
+                                                    <td><input type="text"
+                                                    class="mc_id_no"
+                                                               id="mc_id_no${i}"
+                                                               name="mc_id_no"
+                                                               value=""></td>
+
+                                                </tr>`
+                    }
+                    $("#tbody-info").html(table);
+
+                    let counter = 0
+                    crp.map(value => {
+                        //operation list
+                        let operationSequence = $(".operationSequence")[counter].id
+                        let production_center = $(".production_center")[counter].id
+                        let reqdcapunit = $(".reqdcapunit")[counter].id
+                        let ReqdMcHrByUnit = $(".ReqdMcHrByUnit")[counter].id
+
+                        $(`#${operationSequence}`).val(value.operationSequence);
+                        $(`#${production_center}`).val(value.productioncneter);
+                        $(`#${reqdcapunit}`).val(value.reqdcapunit);
+                        $(`#${ReqdMcHrByUnit}`).val(value.ReqdMcHrByUnit);
+
+                        // product center
+                        let AvalStartDate = $(".AvalStartDate")[counter].id
+                        let AvalMcHrOrDay = $(".AvalMcHrOrDay")[counter].id
+                        let AvalStartTime = $(".AvalStartTime")[counter].id
+                        let NoOfMCByResAval = $(".NoOfMCByResAval")[counter].id
+                        let AvalCAPByDay = $(".AvalCAPByDay")[counter].id
+
+                        $(`#${AvalStartDate}`).val(value.AvalStartDate);
+                        $(`#${AvalMcHrOrDay}`).val(value.AvalMcHrOrDay);
+                        $(`#${AvalStartTime}`).val(value.AvalStartTime);
+                        $(`#${NoOfMCByResAval}`).val(value.NoOfMCByResAval);
+                        $(`#${AvalCAPByDay}`).val(value.AvalCAPByDay);
+
+                        counter = counter + 1;
+                    })
+
+                    const btn = document.getElementById('crp-btn');
+                    btn.remove();
+
+                    const addbtn = document.getElementById('crps');
+                    addbtn.innerHTML = `<div class="form-actions wizard mgtp-20">
+                                <div class="row mgbt-xs-0">
+                                    <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                             href="javascript:void(0);"><span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                        Previous</a></div>
+                                    <div class="col-xs-6 text-right">
+                                    <button id="crp-form" type="submit"  class="btn vd_btn " >Save And Continue
+                                        <span class="menu-icon"><i
+                                                class="fa fa-fw fa-chevron-circle-right"></i></span></button>
+                                    </div>
+                                </div>
+                            </div>`
+                } else {
+
+                }
+
+
+            },
+        })
+
+
+    });
+
+
+</script>
+{% endblock %}

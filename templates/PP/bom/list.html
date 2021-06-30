@@ -1,0 +1,173 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">BOM</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="well bs-component">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+    </span>
+    {% endif %}
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>BOM ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+    <form class="form-horizontal">
+        <fieldset>
+            <a href="{% url 'productionplanning:AddBOM' %}" class="btn btn-success">Create New {{title}}</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">Bom Ref No</p></th>
+                            <th><p align="center">Purpose Of Bom</p></th>
+                            <th><p align="center">Final Product</p></th>
+                            <th><p align="center">Order Ref.</p></th>
+                            <th><p align="center">Responsible Dept</p></th>
+                            <th><p align="center">Options/Old Bom</p></th>
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+                        <tbody id="BOM">
+                        {% for product in products %}
+                        <tr class="info">
+                            <td align="center">{{product.id }}</td>
+                            <td align="center">{{product.purpose_of_bom }}</td>
+                            <td align="center">{{product.final_product }}</td>
+                            <td align="center">{{product.order_ref }}</td>
+                            <td align="center">{{product.responsible_dept }}</td>
+                            <td align="center">{{product.options_or_old_bom }}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewBOM' product.id %}" class="btn btn-success"><i
+                                        class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopyBOM' product.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateBOM' product.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteBOM' product.id %}" class="btn btn-danger"><i
+                                        class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let Data;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterBOM"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const BOM of data.BOMs) {
+                        const ViewBOM = "{% url 'productionplanning:ViewBOM' 1 %}".replace('1', BOM.id);
+                        const CopyBOM = "{% url 'productionplanning:CopyBOM' 1 %}".replace('1', BOM.id);
+                        const UpdateBOM = "{% url 'productionplanning:UpdateBOM' 1 %}".replace('1', BOM.id);
+                        const DeleteBOM = "{% url 'productionplanning:DeleteBOM' 1 %}".replace('1', BOM.id);
+                        Data = Data + ` <tr class="info">
+                                       <td align="center">${BOM.id}</td>
+                            <td align="center">${BOM.purpose_of_bom}</td>
+                            <td align="center">${BOM.final_product}</td>
+                            <td align="center">${BOM.order_ref}</td>
+                            <td align="center">${BOM.responsible_dept}</td>
+                            <td align="center">${BOM.options_or_old_bom}</td>
+                            <td align="center">
+                                <a href="${ViewBOM}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                    <a href="${CopyBOM}"
+                                   class="btn btn-success "><i class="fa fa-files-o"></i></a>
+                                   <a href="${UpdateBOM}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="${DeleteBOM}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#BOM").html(Data);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">BOM ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("BOM").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+
+<script type="application/javascript">
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+</script>
+{% endblock %}

@@ -1,0 +1,838 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block header %}
+<link href="{% static 'css/scroll.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListMRP' %}">MRP</a></li>
+            <li class="active">Add</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="col-md-12">
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+            {% if messages %}
+            <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+        </span>
+            {% endif %}
+
+            <div class="form-horizontal">
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li class="active"><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            MRP Data </a></li>
+                        <li><a href="#tab33" data-toggle="tab">
+                            <div class="menu-icon"> 3</div>
+                            Review </a></li>
+
+
+                    </ul>
+
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <form id="general_data_form" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Date.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.data }}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Order REF:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.order_ref }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Finished Product
+                                        No.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.final_prod_no }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Finished Product
+                                        Des.:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.final_prod_des }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">BOM Ref.:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.bom_ref_no }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">MRP Purpose:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.mrp_purpose }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Responsible
+                                        Dept:<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{ general_data_form.responsible_dept }}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane active " id="tab32">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"> Date.:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.data}}">
+                                </div>
+                                <label class="col-sm-2 control-label"> Order Ref.:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.order_ref}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Finished Product
+                                    No.:<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.final_prod_no}}">
+                                </div>
+                                <label class="col-sm-2 control-label">Finished Product
+                                    Des.:<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled"
+                                           value="{{mrpg.final_prod_des}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">MRP Purpose:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.mrp_purpose}}">
+                                </div>
+                                <label class="col-sm-2 control-label">BOM Ref:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.bom_ref_no}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Responsible
+                                    Dept<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.responsible_dept}}">
+                                </div>
+                                <label class="col-sm-2 control-label">MRP No. :<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg_id}}">
+                                </div>
+                            </div>&nbsp;
+
+
+                            <div class="container">
+
+                                <div class="hack1">
+                                    <div class="hack2">
+                                        <form method="POST" id="mrp-form">
+                                            {% csrf_token %}
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Com Product No.
+                                                    </th>
+
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Comp Desc.
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Required QTY
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Total Reqd QTY
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Required Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Source
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Source Name
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Action Required
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Status
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Time To Get
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                {% for x in bom_raw %}
+                                                <input type="hidden"
+                                                       id="mrp_general_data"
+                                                       name="mrp_general_data"
+                                                       readonly
+                                                       value="{{ id }}">
+                                                <tr>
+                                                    <!--                <td>Tiger Nixon</td>-->
+                                                    <td><input type="text"
+                                                               id="raw_id"
+                                                               name="raw_id"
+                                                               readonly
+                                                               value="{{ x.raw_material }}"></td>
+
+                                                    <td><input type="text"
+                                                               id="product_description"
+                                                               name="product_description"
+                                                               readonly
+                                                               value="{{x.product_description }}">
+                                                    </td>
+                                                    <td><input type="text"
+                                                               id="unit"
+                                                               name="unit"
+                                                               readonly
+                                                               value="{{x.unit }}"></td>
+                                                    <td><input type="text"
+                                                               id="qty_required"
+                                                               name="qty_required"
+                                                               readonly
+                                                               value="{{x.qty_required }}"></td>
+                                                    <td><input type="text"
+                                                               id="total_reqd_qty"
+                                                               name="total_reqd_qty"
+                                                               value=""></td>
+                                                    <td><input class="form-control" type="date"
+                                                               id="required_date"
+                                                               name="required_date"
+                                                               value=""></td>
+                                                    <td><select size="1" id="row-1-office"
+                                                                name="source">
+                                                        <option value="">Select Source
+                                                        </option>
+                                                        <option value="In House Production">In-House Production
+                                                        </option>
+                                                        <option value="Out Side">Out side
+                                                        </option>
+                                                        <option value="In Store">In-Store
+                                                        </option>
+                                                    </select></td>
+                                                    <td><input type="text"
+                                                               id="source_name"
+                                                               name="source_name"
+                                                               value=""></td>
+                                                    <td><select size="1" id="action_required"
+                                                                name="action_required">
+                                                        <option value="">Select Action
+                                                        </option>
+                                                        <option value="Place Production Order">Place
+                                                            Production Order
+                                                        </option>
+                                                        <option value="Place Purchase Order">Place
+                                                            Purchase Order
+                                                        </option>
+                                                        <option value="Place Requisition Slip">Place
+                                                            Requisition Slip
+                                                        </option>
+                                                    </select></td>
+                                                    <td><input type="text"
+                                                               id="status"
+                                                               name="status"
+                                                               value=" "></td>
+                                                    <td><input type="text"
+                                                               id="time_to_get"
+                                                               name="time_to_get"
+                                                               value=""></td>
+
+                                                </tr>
+                                                {% endfor %}
+
+
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Com Product No.
+                                                    </th>
+
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Comp Desc.
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Unit
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Required QTY
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Total Reqd QTY
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Required Date
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Source
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Source Name
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Action Required
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                        Status
+                                                    </th>
+                                                    <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                        Time To Get
+                                                    </th>
+
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="tab-pane" id="tab33">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"> Date.:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.data}}">
+                                </div>
+                                <label class="col-sm-2 control-label"> Order Ref.:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.order_ref}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Finished Product
+                                    No.:<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.final_prod_no}}">
+                                </div>
+                                <label class="col-sm-2 control-label">Finished Product
+                                    Des.:<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled"
+                                           value="{{mrpg.final_prod_des}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">MRP Purpose:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.mrp_purpose}}">
+                                </div>
+                                <label class="col-sm-2 control-label">BOM Ref:<span
+                                        class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.bom_ref_no}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Responsible
+                                    Dept<span class="vd_red">*</span></label>
+                                <div class="col-sm-4 controls">
+                                    <input type="text" class="form-control"
+                                           disabled="disabled" value="{{mrpg.responsible_dept}}">
+                                </div>
+                            </div>&nbsp;
+                            <div class="container">
+
+                                <div class="hack1">
+                                    <div class="hack2">
+
+                                        <table style="width:auto;">
+                                            <thead>
+                                            <tr>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Com Product No.
+                                                </th>
+
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Comp Desc.
+                                                </th>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                    Unit
+                                                </th>
+
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                    Total Reqd QTY
+                                                </th>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Required Date
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <!--                <td>Tiger Nixon</td>-->
+                                                <td><input type="text"
+                                                           id="row-1-position"
+                                                           name="row-1-position"
+                                                           disabled="disabled"
+                                                           value="SR111"></td>
+
+                                                <td><input type="text"
+                                                           id="row-3-position"
+                                                           name="row-3-position"
+                                                           disabled="disabled"
+                                                           value="26/1 Cot Comb yarn">
+                                                </td>
+                                                <td><input type="text"
+                                                           id="row-4-position"
+                                                           name="row-4-position"
+                                                           disabled="disabled"
+                                                           value="kg"></td>
+                                                <td><input type="text"
+                                                           id="row-5-position"
+                                                           name="row-5-position"
+                                                           disabled="disabled"
+                                                           value="330"></td>
+                                                <td><input type="text"
+                                                           id="row-6-position"
+                                                           name="row-6-position"
+                                                           disabled="disabled"
+                                                           value="10-Apr"></td>
+
+                                            </tr>
+
+
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Com Product No.
+                                                </th>
+
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Comp Desc.
+                                                </th>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                    Unit
+                                                </th>
+
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red  ">
+                                                    Total Reqd QTY
+                                                </th>
+                                                <th style=" border: 1px solid black; text-align:center; font-weight:bold; color:red ">
+                                                    Required Date
+                                                </th>
+
+
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions wizard mgtp-20">
+                            <div class="row mgbt-xs-0">
+                                <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                         href="javascript:void(0);"><span
+                                        class="menu-icon"><i
+                                        class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                    Previous</a></div>
+                                <div class="col-xs-6 text-right"><a onclick="display()"
+                                                                    class="btn vd_btn next"
+                                                                    href="javascript:void(0);">Save And Continue
+                                    <span class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-right"></i></span></a>
+                                    <a class="btn vd_btn vd_bg-green finish"
+                                       href="crp.html"><span class="menu-icon"><i
+                                            class="fa fa-fw fa-check"></i></span> Finish</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Panel Widget -->
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script type="text/javascript">
+
+    function display() {
+        document.getElementById("mrp-form").submit();
+    }
+
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+
+</script>
+{% endblock %}

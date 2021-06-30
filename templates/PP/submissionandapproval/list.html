@@ -1,0 +1,211 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block breadcrumbs %}
+
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">Submission & Approval</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="well bs-component">
+
+    {% if messages %}
+    <span id='mass-sub'>
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                {%endif%}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {%endif%}
+            {% endfor %}
+        </span>
+    {% endif %}
+    <span id='mass'></span>
+    <div class="form-horizontal">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Submission & Approval ID</label>
+                </div>
+                <div class="col-sm-3">
+                    {{filters.form.id}}
+                </div>
+                <div class="col-sm-1">
+                    <label>Data</label>
+                </div>
+                <div class="col-sm-3">
+                    {{filters.form.data_of_submission}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>R & D / Order Ref. No</label>
+                </div>
+                <div class="col-sm-3">
+                    {{filters.form.r_and_d_order_ref_no}}
+                </div>
+                <div class="col-sm-1">
+                    <label>Product no</label>
+                </div>
+                <div class="col-sm-3">
+                    {{filters.form.product_no}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Item Ref No</label>
+                </div>
+                <div class="col-sm-3">
+                    {{filters.form.item_ref_no}}
+                </div>
+
+                <div class="col-sm-3">
+                    <button class="btn btn-success" type="submit">Filter</button>
+                </div>
+            </div>
+
+            <div class="text-center">
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <div class="form-horizontal">
+
+        <fieldset>
+            <a href="{% url 'productionplanning:PostSubmissionAndApproval' %}" class="btn btn-success">Create New
+                {{title}}</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">ID</p></th>
+                            <th><p align="center">Date</p></th>
+                            <th><p align="center">R&D / Order Ref. No</p></th>
+                            <th><p align="center">Product No.</p></th>
+                            <th><p align="center">Item Description</p></th>
+                            <th><p align="center">Color / Variety</p></th>
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+                        <tbody id="SubmissionAndApproval">
+                        {% for SubmissionAndApproval in SubmissionAndApprovals %}
+                        <tr class="info">
+                            <td align="center">{{SubmissionAndApproval.id}}</td>
+                            <td align="center">{{SubmissionAndApproval.date }}</td>
+                            <td align="center">{{SubmissionAndApproval.r_and_d_order_ref_no }}</td>
+                            <td align="center">{{SubmissionAndApproval.product_no }}</td>
+                            <td align="center">{{SubmissionAndApproval.item_description }}</td>
+                            <td align="center">{{SubmissionAndApproval.color_per_variety }}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewSubmissionAndApproval' SubmissionAndApproval.id %}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopySubmissionAndApproval' SubmissionAndApproval.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateSubmissionAndApproval' SubmissionAndApproval.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteSubmissionAndApproval' SubmissionAndApproval.id %}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let submissionAndApproval;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterSubmissionAndApproval"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const SubmissionAndApproval of data.SubmissionAndApprovals) {
+                        const ViewSubmissionAndApproval = "{% url 'productionplanning:ViewSubmissionAndApproval' 1 %}".replace('1', SubmissionAndApproval.id);
+                        const CopySubmissionAndApproval = "{% url 'productionplanning:CopySubmissionAndApproval' 1 %}".replace('1', SubmissionAndApproval.id);
+                        const UpdateSubmissionAndApproval = "{% url 'productionplanning:UpdateSubmissionAndApproval' 1 %}".replace('1', SubmissionAndApproval.id);
+                        const DeleteSubmissionAndApproval = "{% url 'productionplanning:DeleteSubmissionAndApproval' 1 %}".replace('1', SubmissionAndApproval.id);
+                        submissionAndApproval = submissionAndApproval + ` <tr class="info">
+                            <td align="center">${SubmissionAndApproval.id}</td>
+                            <td align="center">${SubmissionAndApproval.date}</td>
+                            <td align="center">${SubmissionAndApproval.r_and_d_order_ref_no}</td>
+                            <td align="center">${SubmissionAndApproval.product_no}</td>
+                            <td align="center">${SubmissionAndApproval.item_description}</td>
+                            <td align="center">${SubmissionAndApproval.color_per_variety}</td>
+                            <td align="center">
+                                <a href="${ViewSubmissionAndApproval}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                    <a href="${CopySubmissionAndApproval}"
+                                   class="btn btn-success "><i class="fa fa-files-o"></i></a>
+                                <a href="${UpdateSubmissionAndApproval}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+
+                                <a href="${DeleteSubmissionAndApproval}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#SubmissionAndApproval").html(submissionAndApproval);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">Submission & Approval ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("SubmissionAndApproval").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+<script type="application/javascript">
+    setTimeout(function () {
+        document.getElementById("mass-sub").innerHTML = ''
+    }, 3000);
+</script>
+{% endblock %}

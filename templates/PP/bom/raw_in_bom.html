@@ -1,0 +1,341 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListBOM' %}">BOM</a></li>
+            <li class="active">Add BOM</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div id="raw_name">
+
+</div>
+<div class="col-md-12">
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+            {% if messages %}
+            <span id='mass-sub'>
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" role="alert">{{ message }}</div>
+                    {%endif%}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">{{ message }}</div>
+                    {%endif%}
+                {% endfor %}
+            </span>
+            {% endif %}
+            <div class="form-horizontal">
+
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li class="active"><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            Component/Raw Mats Data </a></li>
+                    </ul>
+
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <form method="POST" id="bom">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Purpose Of
+                                        Bom:</label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.purpose_of_bom}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Final Product :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.final_product}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Unit Of Mea :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.unit_of_meas}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Order Ref. :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.order_ref}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Responsible Dept :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.responsible_dept}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Valid From :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.valid_from}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Valid To :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.valid_to}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Options/Old Bom
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.options_or_old_bom}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Lab Ref.
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.labref}}
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="tab-pane active" id="tab32">
+                            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General
+                                Data</strong></h3>
+                            <table class="table table-bordered table-hover table-condensed"
+                                   id="myTable">
+                                <thead>
+                                <tr class="vd_navbar">
+                                    <th><p align="center">Purpose Of Bom</p></th>
+                                    <th><p align="center">Order Ref</p></th>
+                                    <th><p align="center">Responsible Dept</p></th>
+                                    <th><p align="center">Valid From</p></th>
+                                    <th><p align="center">Valid To</p></th>
+                                    <th><p align="center">Options/Old Bom</p></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <td align="center">{{bom.purpose_of_bom}}</td>
+                                    <td align="center">{{bom.order_ref}}</td>
+                                    <td align="center">{{bom.responsible_dept}}</td>
+                                    <td align="center">{{bom.valid_from}}</td>
+                                    <td align="center">{{bom.valid_to}}</td>
+                                    <td align="center">{{bom.options_or_old_bom}}</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <br>
+                            <br>
+                            {% if RowMaterial %}
+                            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Row Material Data</strong></h3>
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead>
+                                <tr class="vd_navbar">
+                                    <th><p align="center">Prod Category</p></th>
+                                    <th><p align="center">Prod Description</p></th>
+                                    <th><p align="center">Unit</p></th>
+                                    <th><p align="center">Qty Required</p></th>
+                                    <th><p align="center">Assigned Store</p></th>
+                                    <th><p align="center">Status</p></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for x in RowMaterial %}
+                                <tr>
+                                    <td align="center">{{x.product_category}}</td>
+                                    <td align="center">{{x.product_description}}</td>
+                                    <td align="center">{{x.unit}}</td>
+                                    <td align="center">{{x.qty_required}}</td>
+                                    <td align="center">{{x.assigned_stroe}}</td>
+                                    <td align="center">{{x.status}}</td>
+                                </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <h1 class="text-center">The row material has not been added yet.</h1>
+                            {% endif %}
+
+                            <br>
+                            <br>
+
+                            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Add
+                                New Raw Material</strong></h3>
+                            <div>
+                                <div class="form-group ">
+                                    <label class="col-sm-3" style="text-align: right;">Raw ID:<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4">
+                                        <input id="raw_id2" type="text" class="form-control"
+                                               placeholder="Enter Raw Material ID">
+                                        <span style="color: red" id="wrong-id-mass"></span>
+                                    </div>
+                                </div>
+                                <form method="POST" class="form-horizontal" id="row_bom">
+                                    {% csrf_token %}
+
+                                    {{BomAndRowMaterialForm.raw_material}}
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Prod
+                                            Category: <span
+                                                    class="vd_red">*</span></label>
+                                        <div class="col-sm-4">
+                                            {{BomAndRowMaterialForm.product_category}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Prod
+                                            Description: <span
+                                                    class="vd_red">*</span></label>
+                                        <div class="col-sm-4">
+                                            {{BomAndRowMaterialForm.product_description}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Unit:</label>
+                                        <div class="col-sm-4 controls">
+                                            {{BomAndRowMaterialForm.unit}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Qty
+                                            Required:<span
+                                                    class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            {{BomAndRowMaterialForm.qty_required}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Assigned
+                                            Store:<span
+                                                    class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            {{BomAndRowMaterialForm.assigned_stroe}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Status:<span
+                                                class="vd_red">*</span></label>
+                                        <div class="col-sm-4 controls">
+                                            {{BomAndRowMaterialForm.status}}
+                                        </div>
+                                    </div>
+                                    <div class="wrapper" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary ">Next <span
+                                                class="menu-icon"><i
+                                                class="fa fa-fw fa-chevron-circle-right"></i></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="form-actions wizard mgtp-20">
+                            <div class="row mgbt-xs-0">
+                                <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                         href="javascript:void(0);"><span
+                                        class="menu-icon"><i
+                                        class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                    Previous</a></div>
+                                <div class="col-xs-6 text-right">
+                                    <a
+                                            class="btn vd_btn next"
+                                            href="javascript:void(0);">Next <span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-chevron-circle-right"></i></span></a>
+                                    <button id="row_bom_finish" class="btn vd_btn vd_bg-green finish"><span
+                                            class="menu-icon"><i
+                                            class="fa fa-fw fa-check"></i></span> Finish</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Panel Widget -->
+</div>
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+<script type="text/javascript">
+
+    $('#row_bom_finish').click(function () {
+        let row_bom =document.getElementById('row_bom')
+        row_bom.setAttribute("action", "{% url 'productionplanning:FinishedRawInBOM' id %}");
+        row_bom.submit();
+    })
+
+
+    $("#raw_id2").focusout(function () {
+        $.ajax({
+            url: '{% url "productionplanning:RawInBOM" id %}',
+            method: 'GET',
+            data: {
+                raw_id: this.value
+            },
+            success: (data) => {
+                if (data.RawMaterial.length !== 0) {
+                    document.getElementById('wrong-id-mass').innerText = null
+                    let raw = data.RawMaterial;
+                    for (let i = 0; i < raw.length; i++) {
+                        $("#id_raw_material").val(raw[i].id);
+                        $("#id_product_category").val(raw[i].product_category);
+                        $("#id_product_description").val(raw[i].product_description);
+                        $("#id_unit").val(raw[i].unit);
+                    }
+                } else {
+                    document.getElementById('wrong-id-mass').innerText = 'ID not in database'
+                    $("#id_raw_material").val('');
+                    $("#id_product_category").val('');
+                    $("#id_product_description").val('');
+                    $("#id_unit").val('');
+                }
+
+            }
+        })
+
+    });
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+</script>
+
+{% endblock %}

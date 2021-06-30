@@ -1,0 +1,289 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListBOM' %}">BOM</a></li>
+            <li class="active">Update BOM</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+    <div class="container">
+        {% if messages %}
+        <span id='mass-sub'>
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" role="alert">{{ message }}</div>
+                    {%endif%}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">{{ message }}</div>
+                    {%endif%}
+                {% endfor %}
+            </span>
+        {% endif %}
+
+        <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>BOM</strong></h3>
+        <form method="POST">
+            {% csrf_token %}
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                <tr class="vd_navbar">
+                    <th><p align="center">Bom Ref No:</p></th>
+                    <th><p align="center">Purpose Of
+                        Bom</p></th>
+                    <th><p align="center">Final
+                        Product </p></th>
+                    <th><p align="center">Unit Of Meas</p></th>
+                    <th><p align="center">Order Ref.</p></th>
+                    <th><p align="center">Responsible Dept</p></th>
+                    <th><p align="center">Valid From</p></th>
+                    <th><p align="center">Valid To</p></th>
+                    <th><p align="center">Options/Old Bom</p></th>
+                    <th><p align="center">Lab Ref.</p></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td align="center"><input type="text" value="{{id}}"></td>
+                    <td align="center">{{forms.purpose_of_bom}}</td>
+                    <td align="center">{{forms.final_product}}</td>
+                    <td align="center">{{forms.unit_of_meas}}</td>
+                    <td align="center">{{forms.order_ref}}</td>
+                    <td align="center">{{forms.responsible_dept}}</td>
+                    <td align="center">{{forms.valid_from}}</td>
+                    <td align="center">{{forms.valid_to}}</td>
+                    <td align="center">{{forms.options_or_old_bom}}</td>
+                    <td align="center">{{forms.labref}}</td>
+                </tr>
+                </tbody>
+
+
+            </table>
+            {% if btn_name == 'Copy'%}
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"><span style="margin: 5px">{{btn_name}}</span><i
+                        class="fa fa-files-o"></i></button>
+            </div>
+            {% else %}
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"><span style="margin: 5px">{{btn_name}}</span><i
+                        class="fa fa-edit"></i></button>
+            </div>
+            {% endif %}
+        </form>
+        <br/>
+        <br/>
+        <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Raw Material</strong></h3>
+
+
+        <div>
+            <div>
+
+                <form method="POST" action="{% url 'productionplanning:UpdateBomAndRowMaterial' id %}">
+                    {% csrf_token %}
+                    {{ formset.management_form }}
+                    {{ formset.non_form_errors.as_ul }}
+
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+                        {% for form in formset.forms %}
+                        {% if forloop.first %}
+                        <thead>
+                        <tr class="vd_navbar">
+                            {% for field in form.visible_fields %}
+                            <th><p align="center">{{ field.label|upper }}</p></th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        {% endif %}
+                        <tr>
+                            {% for field in form.visible_fields %}
+                            <td>
+                                {% if forloop.first %}
+                                {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                                {% endfor %}
+                                {% endif %}
+                                {{ field.errors.as_ul }}
+                                {{ field }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+
+
+                    </table>
+                    {% if btn_name == 'Copy'%}
+                    {% else %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary"><span style="margin: 5px">{{btn_name}}</span><i
+                                class="fa fa-edit"></i></button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+
+            <div class="container">
+                <button type="button" class="collapsible btn btn-success"><span style="margin: 5px">Add New Raw</span><i
+                        class="fa fa-plus"></i></button>
+                <div style="display: none;overflow: hidden;">
+                    <div class="form-group ">
+                        <label class="col-sm-3" style="text-align: right;">Raw ID:<span
+                                class="vd_red">*</span></label>
+                        <div class="col-sm-4">
+                            <input id="raw_id" type="text" class="form-control"
+                                   placeholder="Enter Raw Material ID">
+                            <span style="color: red" id="wrong-id-mass"></span>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <form method="POST" class="form-horizontal col-sm-12">
+                        {% csrf_token %}
+
+                        {{BomAndRowMaterialForm.raw_material}}
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Prod
+                                Category: <span
+                                        class="vd_red">*</span></label>
+                            <div class="col-sm-4">
+                                {{BomAndRowMaterialForm.product_category}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Prod
+                                Description: <span
+                                        class="vd_red">*</span></label>
+                            <div class="col-sm-4">
+                                {{BomAndRowMaterialForm.product_description}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Unit:</label>
+                            <div class="col-sm-4 controls">
+                                {{BomAndRowMaterialForm.unit}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Qty
+                                Required:<span
+                                        class="vd_red">*</span></label>
+                            <div class="col-sm-4 controls">
+                                {{BomAndRowMaterialForm.qty_required}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Assigned
+                                Store:<span
+                                        class="vd_red">*</span></label>
+                            <div class="col-sm-4 controls">
+                                {{BomAndRowMaterialForm.assigned_stroe}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Status:<span
+                                    class="vd_red">*</span></label>
+                            <div class="col-sm-4 controls">
+                                {{BomAndRowMaterialForm.status}}
+                            </div>
+                        </div>
+                        <div class="wrapper" style="text-align: center">
+                            <button type="submit" class="btn btn-primary ">Add <span
+                                    class="menu-icon"><i
+                                    class="fa fa-fw fa-chevron-circle-right"></i></span>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+
+            <script>
+                var coll = document.getElementsByClassName("collapsible");
+                var i;
+
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
+                }
+            </script>
+        </div>
+
+
+    </div>
+</div>
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+<script type="text/javascript">
+    $("#raw_id").change(function () {
+
+        $.ajax({
+            url: '{% url "productionplanning:RawInBOM" id %}',
+            method: 'GET',
+            data: {
+                raw_id: this.value
+            },
+            success: (data) => {
+                if (data.RawMaterial.length !== 0) {
+                    document.getElementById('wrong-id-mass').innerText = null
+                    let raw = data.RawMaterial;
+                    for (let i = 0; i < raw.length; i++) {
+                        $("#id_raw_material").val(raw[i].id);
+                        $(".product_category3").val(raw[i].product_category);
+                        $(".product_description3").val(raw[i].product_description);
+                        $(".unit3").val(raw[i].unit);
+                    }
+                } else {
+                    document.getElementById('wrong-id-mass').innerText = 'ID not in database'
+                    $("#id_raw_material").val('');
+                    $(".product_category3").val('');
+                    $(".product_description3").val('');
+                    $(".unit3").val('');
+                }
+            }
+        })
+
+    });
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+</script>
+
+
+{% endblock %}

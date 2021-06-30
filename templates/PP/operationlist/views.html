@@ -1,0 +1,97 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListOperationList' %}">Operation List</a></li>
+            <li class="active">View</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General Data</strong></h3>
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr class="vd_navbar">
+            <th><p align="center">Operation List No</p></th>
+            <th><p align="center">Date Of Creation</p></th>
+            <th><p align="center">Usages</p></th>
+            <th><p align="center">Product Catagory</p></th>
+            <th><p align="center">Product Description</p></th>
+            <th><p align="center">Responsible Dept</p></th>
+            <th><p align="center">Previous Ref</p></th>
+            <th><p align="center">Order Ref</p></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td align="center">{{opl.id}}</td>
+            <td align="center">{{opl.dataOfcreation}}</td>
+            <td align="center">{{opl.usage}}</td>
+            <td align="center">{{opl.productioncategory}}</td>
+            <td align="center">{{opl.productdescription}}</td>
+            <td align="center">{{opl.responsibledept}}</td>
+            <td align="center">{{opl.previousref}}</td>
+            <td align="center">{{opl.orderref}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Operation Sequence</strong></h3>
+    <table class="table table-bordered table-hover table-condensed"
+           id="myTable">
+        <thead>
+        <tr class="vd_navbar">
+<!--            <th><p align="center">Operation Sequence ID</p></th>-->
+            <th><p align="center">Operation Sequence</p></th>
+            <th><p align="center">Product Center</p></th>
+            <th><p align="center">Base unit</p></th>
+            <th><p align="center">Reqd Cap/Unit</p></th>
+            <th><p align="center">Standard Time</p></th>
+            <th><p align="center">Allowance Time</p></th>
+            <th><p align="center">Total Time</p></th>
+            <th><p align="center">Components user</p></th>
+            <th><p align="center">Tools required</p></th>
+            <th><p align="center">Inspection Center</p></th>
+            <th><p align="center">Exception Msg</p></th>
+        </tr>
+        </thead>
+
+        <tbody id="tbody">
+        {% for x in OperationSequence %}
+        <tr>
+<!--            <td align="center">{{x.id}}</td>-->
+            <td align="center">{{x.operationSequence}}</td>
+            <td align="center">{{x.production_center}}</td>
+            <td align="center">{{x.baseunit}}</td>
+            <td align="center">{{x.reqdcapunit}}</td>
+            <td align="center">{{x.standardtime}}</td>
+            <td align="center">{{x.allowancetime}}</td>
+            <td align="center">{{x.totaltime}}</td>
+            <td align="center">{{x.componentsuser}}</td>
+            <td align="center">{{x.toolsrequired}}</td>
+            <td align="center">{{x.inspectioncenter}}</td>
+            <td align="center">{{x.exceptionmsg}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'productionplanning:ListOperationList' %}" class="btn btn-danger">Close</a>
+
+
+{% endblock %}

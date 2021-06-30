@@ -1,0 +1,148 @@
+{% extends 'basic.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListSubmissionAndApproval' %}">Submission & Approval</a></li>
+            <li class="active">View</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<form class="form-" action="" method="post" name="form">
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Product No :</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" value={{id}} required="required" readonly>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Date:</label>
+        <div class="col-sm-4 controls">
+            {{forms.data_of_submission}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">R&D / Order Ref. No:<span class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.r_and_d_order_ref_no}}
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Product No.:</label>
+        <div class="col-sm-4 controls">
+            {{forms.product_no}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Item Description:</label>
+        <div class="col-sm-4 controls">
+            {{forms.item_description}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Color / Variety:</label>
+        <div class="col-sm-4 controls">
+            {{forms.color_per_variety}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Subm Product:</label>
+        <div class="col-sm-4 controls">
+            {{forms.submission_product}}
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Subm Type:</label>
+        <div class="col-sm-4 controls">
+            {{forms.submission_type}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Subm Item:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.submission_item}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Item Ref No.:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.item_ref_no}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Round of Submission:<span class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.round_of_submission}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Pland Subm Date:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.pland_subm_date}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Submitted Date:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.submitted_date}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Result:<span
+                class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.result}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Comment:<span
+                class="vd_red"></span> </label>
+        <div class="col-sm-4 controls">
+            {{forms.comment}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-5 control-label">Date:<span class="vd_red"></span></label>
+        <div class="col-sm-4 controls">
+            {{forms.approval_or_rejection_date}}
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label"></label>
+        <div class="col-sm-4">
+            <!--                      <input type="submit" name="submit" value="Update" class="btn btn-warning">-->
+            <a href="{% url 'productionplanning:ListSubmissionAndApproval' %}" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+
+
+
+

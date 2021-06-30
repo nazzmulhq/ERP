@@ -1,0 +1,179 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active">Finished</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div class="well bs-component">
+
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+    </span>
+    {% endif %}
+
+    <span id='mass'></span>
+    <div class="form-horizontal row">
+        <form method="POST" id="forms">
+            {% csrf_token %}
+            <div class="col-sm-2">
+                <label>Finished ID</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.id}}
+            </div>
+            <div class="col-sm-1">
+                <label>Data</label>
+            </div>
+            <div class="col-sm-3">
+                {{filters.form.date}}
+            </div>
+
+            <button class="btn btn-success" type="submit">Filter</button>
+
+
+        </form>
+
+    </div>
+    <form class="form-horizontal">
+        <fieldset>
+            <a href="{% url 'productionplanning:AddFinished' %}" class="btn btn-success">Create New {{title}}</a>
+            <br><br>
+            <div class="table-responsive">
+                <form method="post" action="">
+                    <table class="table table-bordered table-hover table-condensed"
+                           id="myTable">
+
+                        <thead>
+                        <tr class="info">
+                            <th><p align="center">ID</p></th>
+                            <th><p align="center">Product Category</p></th>
+                            <th><p align="center">Product Description</p></th>
+                            <th><p align="center">Source</p></th>
+                            <th><p align="center">MRP Responsible</p></th>
+                            <th><p align="center">Warehouse Location</p></th>
+                            <th><p align="center">Action</p></th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="Finished">
+                        {% for value in finished %}
+                        <tr class="info">
+                            <td align="center">{{ value.id }}</td>
+                            <td align="center">{{value.product_category }}</td>
+                            <td align="center">{{value.product_description }}</td>
+                            <td align="center">{{value.source }}</td>
+                            <td align="center">{{value.mrp_responsible}}</td>
+                            <td align="center">{{value.warehouse_location}}</td>
+                            <td align="center">
+                                <a href="{% url 'productionplanning:ViewFinished' value.id %}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="{% url 'productionplanning:CopyFinished' value.id %}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="{% url 'productionplanning:UpdateFinished' value.id %}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'productionplanning:DeleteFinished' value.id %}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+                </form>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script src="{% static 'jquery/jquery.min.js' %}">
+
+</script>
+
+<script>
+    $("#forms").submit(function (event) {
+        event.preventDefault()
+        let Data;
+
+        $.ajax({
+            url: '{% url "productionplanning:FilterFinished"%}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: (data) => {
+                if (data.mass === "success") {
+                    for (const Finished of data.Finisheds) {
+                        const ViewFinished = "{% url 'productionplanning:ViewFinished' 1 %}".replace('1', Finished.id);
+                        const CopyFinished = "{% url 'productionplanning:CopyFinished' 1 %}".replace('1', Finished.id);
+                        const UpdateFinished = "{% url 'productionplanning:UpdateFinished' 1 %}".replace('1', Finished.id);
+                        const DeleteFinished = "{% url 'productionplanning:DeleteFinished' 1 %}".replace('1', Finished.id);
+                        Data = Data + ` <tr class="info">
+                             <td align="center">${Finished.id}</td>
+                            <td align="center">${Finished.product_category}</td>
+                            <td align="center">${Finished.product_description}</td>
+                            <td align="center">${Finished.source}</td>
+                            <td align="center">${Finished.mrp_responsible}</td>
+                            <td align="center">${Finished.warehouse_location}</td>
+                            <td align="center">
+                                <a href="${ViewFinished}"
+                                   class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                <a href="${CopyFinished}"
+                                   class="btn btn-success"><i class="fa fa-files-o"></i></a>
+                                <a href="${UpdateFinished}"
+                                   class="btn btn-warning "><i class="fa fa-edit"></i></a>
+                                <a href="${DeleteFinished}"
+                                   class="btn btn-danger"><i class="fa fa-close "></i></a>
+                            </td>
+                        </tr>`
+                    }
+                    $("#Finished").html(Data);
+                    $("#forms").resetForm()
+                } else {
+                    $("#mass").html('<div class="alert alert-danger" role="alert">Finished ID Not Found</div>');
+
+                    $("#forms").resetForm()
+                    document.getElementById("Finished").innerHTML = ''
+                    setTimeout(function () {
+                        document.getElementById("mass").innerHTML = ''
+                    }, 3000);
+                }
+            }
+        })
+    })
+</script>
+
+
+<script type="application/javascript">
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+</script>
+{% endblock %}

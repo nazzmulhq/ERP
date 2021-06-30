@@ -1,0 +1,427 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListBOM' %}">BOM</a></li>
+            <li class="active">Add BOM</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div id="raw_name">
+
+</div>
+
+
+<!--<div class="col-md-12">-->
+<!--    <div class="panel widget">-->
+<!--        <div class="panel-heading vd_bg-grey">-->
+<!--            &lt;!&ndash;                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div class="panel-body-list">-->
+
+
+<!--            <div id="wizard-3" class="form-wizard condensed">-->
+<!--                <ul class="nav nav-pills nav-justified">-->
+<!--                    <li><a href="#tab31" data-toggle="tab">-->
+<!--                       -->
+<!--                        General Data </a></li>-->
+<!--                    -->
+<!--                </ul>-->
+
+<!--                <div class="tab-content no-bd pd-25">-->
+<!--                    <div class="tab-pane" id="tab31">-->
+<!--                        <form class="form-horizontal" method="POST" role="form">-->
+<!--                            {% csrf_token %}-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Purpose Of-->
+<!--                                    Bom:</label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.purpose_of_bom}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Final-->
+<!--                                    Product :<span class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.final_product}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Unit Of Meas :<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.unit_of_meas}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Order Ref. :<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.order_ref}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Responsible Dept :<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.responsible_dept}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Valid From :<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.valid_from}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Valid To :<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.valid_to}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Options/Old Bom-->
+<!--                                    :<span class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.options_or_old_bom}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Lab Ref.-->
+<!--                                    :<span class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    {{forms.labref}}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        <div style="text-align:right">-->
+<!--                            <button class="btn btn-success"  type="submit">Submit</button>-->
+<!--                        </div>-->
+<!--                        </form>-->
+
+
+<!--                    </div>-->
+<!--                    <div class="tab-pane" id="tab32">-->
+<!--                        <button type="button" class="collapsible">Add New Raw-->
+<!--                        </button>-->
+<!--                        <div style="display: none;overflow: hidden;">-->
+
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Prod-->
+<!--                                    Description: <span-->
+<!--                                            class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4">-->
+<!--                                    <input type="text" name="pname"-->
+<!--                                           class="form-control"-->
+<!--                                           placeholder="Enter Prod Description"-->
+<!--                                           required="required">-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Unit:</label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    <select required="required">-->
+<!--                                        <option value="volvo">Select-->
+<!--                                        </option>-->
+<!--                                        <option value="volvo">Raw product-->
+<!--                                        </option>-->
+<!--                                        <option value="saab">Semi-Fin-->
+<!--                                            product-->
+<!--                                        </option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Qty-->
+<!--                                    Required:<span-->
+<!--                                            class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    <input type="text" class="form-control"-->
+<!--                                           placeholder="Enter product Detail"-->
+<!--                                           required="required">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Assigned-->
+<!--                                    Store:<span-->
+<!--                                            class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    <input type="text" class="form-control"-->
+<!--                                           placeholder="Enter product Detail"-->
+<!--                                           required="required">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-sm-3 control-label">Status:<span-->
+<!--                                        class="vd_red">*</span></label>-->
+<!--                                <div class="col-sm-4 controls">-->
+<!--                                    <input type="text" class="form-control"-->
+<!--                                           placeholder="Enter product Detail"-->
+<!--                                           required="required">-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+
+<!--                        <script>-->
+<!--                            var coll = document.getElementsByClassName("collapsible");-->
+<!--                            var i;-->
+
+<!--                            for (i = 0; i < coll.length; i++) {-->
+<!--                                coll[i].addEventListener("click", function () {-->
+<!--                                    this.classList.toggle("active");-->
+<!--                                    var content = this.nextElementSibling;-->
+<!--                                    if (content.style.display === "block") {-->
+<!--                                        content.style.display = "none";-->
+<!--                                    } else {-->
+<!--                                        content.style.display = "block";-->
+<!--                                    }-->
+<!--                                });-->
+<!--                            }-->
+<!--                        </script>-->
+
+
+<!--                    </div>-->
+
+<!--                    -->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="col-md-12">
+    <div class="panel widget">
+        <div class="panel-heading vd_bg-grey">
+            <!--                    <h3 class="panel-title"> <span class="menu-icon"> <i class="fa fa-magic"></i> </span> Wizard Condensed </h3>-->
+        </div>
+        <div class="panel-body-list">
+            <div class="form-horizontal">
+
+                <div id="wizard-3" class="form-wizard condensed">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#tab31" data-toggle="tab">
+                            <div class="menu-icon"> 1</div>
+                            General Data </a></li>
+                        <li><a href="#tab32" data-toggle="tab">
+                            <div class="menu-icon"> 2</div>
+                            Component/Raw Mats Data </a></li>
+
+
+                    </ul>
+
+                    <div class="tab-content no-bd pd-25">
+                        <div class="tab-pane" id="tab31">
+                            <form method="POST" id="bom">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Purpose Of
+                                        Bom:</label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.purpose_of_bom}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Final Product :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.final_product}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Unit Of Mea :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.unit_of_meas}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Order Ref. :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.order_ref}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Responsible Dept :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.responsible_dept}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Valid From :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.valid_from}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Valid To :<span
+                                            class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.valid_to}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Options/Old Bom
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.options_or_old_bom}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Lab Ref.
+                                        :<span class="vd_red">*</span></label>
+                                    <div class="col-sm-4 controls">
+                                        {{forms.labref}}
+                                    </div>
+                                </div>
+
+                                <div class="form-actions wizard mgtp-20">
+                                    <div class="row mgbt-xs-0">
+                                        <div class="col-xs-6"><a class="btn vd_btn prev"
+                                                                 href="javascript:void(0);"><span
+                                                class="menu-icon"><i
+                                                class="fa fa-fw fa-chevron-circle-left"></i></span>
+                                            Previous</a></div>
+                                        <div class="col-xs-6 text-right">
+                                            <button type="submit"
+                                               class="btn vd_btn ">Next <span
+                                                    class="menu-icon"><i
+                                                    class="fa fa-fw fa-chevron-circle-right"></i></span></button>
+                                            <a class="btn vd_btn vd_bg-green finish"
+                                               href="javascript:void(0);"><span
+                                                    class="menu-icon"><i
+                                                    class="fa fa-fw fa-check"></i></span> Finish</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="tab-pane" id="tab32">
+
+                            <h1 class="text-center">First Add General Data</h1>
+                            <!--                            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General-->
+                            <!--                                Data</strong></h3>-->
+                            <!--                            <table class="table table-bordered table-hover table-condensed"-->
+                            <!--                                   id="myTable">-->
+                            <!--                                <thead>-->
+                            <!--                                <tr class="vd_navbar">-->
+                            <!--                                    <th><p align="center">Purpose Of Bom</p></th>-->
+                            <!--                                    <th><p align="center">Product Description</p></th>-->
+                            <!--                                    <th><p align="center">Order Ref</p></th>-->
+                            <!--                                    <th><p align="center">Responsible Dept</p></th>-->
+                            <!--                                    <th><p align="center">Valid From</p></th>-->
+                            <!--                                    <th><p align="center">Valid To</p></th>-->
+                            <!--                                    <th><p align="center">Options/Old Bom</p></th>-->
+
+                            <!--                                </tr>-->
+                            <!--                                </thead>-->
+                            <!--                            </table>-->
+                            <!--                            <br>-->
+                            <!--                            <br>-->
+
+                            <!--                            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Add-->
+                            <!--                                New Raw Material</strong></h3>-->
+                            <!--                            <div>-->
+                            <!--                                <div class="form-group ">-->
+                            <!--                                    <label class="col-sm-3" style="text-align: right;">Raw Material ID:<span-->
+                            <!--                                            class="vd_red">*</span></label>-->
+                            <!--                                    <div class="col-sm-4">-->
+                            <!--                                        <input id="raw_id" type="text" class="form-control"-->
+                            <!--                                               placeholder="Enter Raw Material ID">-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="form-group">-->
+                            <!--                                    <label class="col-sm-3 control-label">Prod-->
+                            <!--                                        Description: <span-->
+                            <!--                                                class="vd_red">*</span></label>-->
+                            <!--                                    <div class="col-sm-4">-->
+                            <!--                                        <input type="text" name="pname"-->
+                            <!--                                               class="form-control"-->
+                            <!--                                               placeholder="Enter Prod Description"-->
+                            <!--                                               required="required">-->
+                            <!--                                    </div>-->
+
+                            <!--                                </div>-->
+                            <!--                                <div class="form-group">-->
+                            <!--                                    <label class="col-sm-3 control-label">Unit:</label>-->
+                            <!--                                    <div class="col-sm-4 controls">-->
+                            <!--                                        <select required="required">-->
+                            <!--                                            <option value="volvo">Select</option>-->
+                            <!--                                            <option value="volvo">Raw product</option>-->
+                            <!--                                            <option value="saab">Semi-Fin product-->
+                            <!--                                            </option>-->
+                            <!--                                        </select>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="form-group">-->
+                            <!--                                    <label class="col-sm-3 control-label">Qty-->
+                            <!--                                        Required:<span class="vd_red">*</span></label>-->
+                            <!--                                    <div class="col-sm-4 controls">-->
+                            <!--                                        <input type="text" class="form-control"-->
+                            <!--                                               placeholder="Enter product Detail"-->
+                            <!--                                               required="required">-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="form-group">-->
+                            <!--                                    <label class="col-sm-3 control-label">Assigned-->
+                            <!--                                        Store:<span class="vd_red">*</span></label>-->
+                            <!--                                    <div class="col-sm-4 controls">-->
+                            <!--                                        <input type="text" class="form-control"-->
+                            <!--                                               placeholder="Enter product Detail"-->
+                            <!--                                               required="required">-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="form-group">-->
+                            <!--                                    <label class="col-sm-3 control-label">Status:<span-->
+                            <!--                                            class="vd_red">*</span></label>-->
+                            <!--                                    <div class="col-sm-4 controls">-->
+                            <!--                                        <input type="text" class="form-control"-->
+                            <!--                                               placeholder="Enter product Detail"-->
+                            <!--                                               required="required">-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="wrapper" style="text-align: center">-->
+                            <!--                                    <button class="btn btn-primary ">Next <span-->
+                            <!--                                            class="menu-icon"><i-->
+                            <!--                                            class="fa fa-fw fa-chevron-circle-right"></i></span>-->
+                            <!--                                    </button>-->
+                            <!--                                </div>-->
+
+                            <!--                            </div>-->
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Panel Widget -->
+</div>
+
+
+{% endblock %}

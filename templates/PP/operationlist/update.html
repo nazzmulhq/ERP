@@ -1,0 +1,244 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="vd_head-section clearfix">
+    <div class="vd_panel-header">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'productionplanning:ListOperationList' %}">Operation List</a></li>
+            <li class="active">Update Operation List</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block title_bar %}
+<div class="vd_title-section clearfix">
+    <div class="vd_panel-header">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="vd_content-section clearfix">
+    {% if messages %}
+    <span id='mass-sub'>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {%endif%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {%endif%}
+        {% endfor %}
+    </span>
+    {% endif %}
+    <div class="row">
+        <div class="container">
+            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>General Data</strong></h3>
+            <form method="POST">
+                {% csrf_token %}
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                    <tr class="vd_navbar">
+                        <th><p align="center">Operation List No</p></th>
+                        <th><p align="center">Date Of Creation</p></th>
+                        <th><p align="center">Usages</p></th>
+                        <th><p align="center">Product Catagory</p></th>
+                        <th><p align="center">Product Description</p></th>
+                        <th><p align="center">Responsible Dept</p></th>
+                        <th><p align="center">Previous Ref</p></th>
+                        <th><p align="center">Order Ref</p></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td align="center"><input type="text" name="id" value="{{id}}" class="form-control text-center"
+                                                  disabled></td>
+                        <td align="center">{{OperationListForm.dataOfcreation}}</td>
+                        <td align="center">{{OperationListForm.usage}}</td>
+                        <td align="center">{{OperationListForm.productioncategory}}</td>
+                        <td align="center">{{OperationListForm.productdescription}}</td>
+                        <td align="center">{{OperationListForm.responsibledept}}</td>
+                        <td align="center">{{OperationListForm.previousref}}</td>
+                        <td align="center">{{OperationListForm.orderref}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <button class="btn btn-success" type="submit">{{btn_name}}</button>
+                </div>
+            </form>
+            <h3 style="background-color:#E5E5E5 ;padding:10px"><strong>Operation Sequence</strong></h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {{ formset.non_form_errors.as_ul }}
+
+                <table class="table table-bordered table-hover table-condensed"
+                       id="myTable">
+                    {% for form in formset.forms %}
+                    {% if forloop.first %}
+                    <thead>
+                    <tr class="vd_navbar">
+                        {% for field in form.visible_fields %}
+                        <th><p align="center">{{ field.label|upper }}</p></th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    {% endif %}
+                    <tr>
+                        {% for field in form.visible_fields %}
+                        <td>
+                            {% if forloop.first %}
+                            {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                            {% endfor %}
+                            {% endif %}
+                            {{ field.errors.as_ul }}
+                            {{ field }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% if btn_name == 'Copy'%}
+                {% else %}
+                <div class="text-center">
+                    <button class="btn btn-success" type="submit">{{btn_name}}</button>
+                </div>
+                {% endif %}
+            </form>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="container">
+            <button type="button" class="collapsible btn btn-success">Add Operation Sequence</button>
+            <div style="display:none;overflow: hidden;" class="content">
+                <form class="form-" method="POST" name="form">
+                    {% csrf_token %}
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Operation
+                            Sequence: <span
+                                    class="vd_red">*</span></label>
+                        <div class="col-sm-4">
+                            {{OperationSequenceForms.operationSequence}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Production Center: <span
+                                class="vd_red">*</span></label>
+                        <div class="col-sm-4">
+                            {{OperationSequenceForms.production_center}}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Base Unit:<span
+                                class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.baseunit}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Req
+                            Cap/Unit:<span
+                                    class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.reqdcapunit}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Standard
+                            Time:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.standardtime}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Allowance
+                            Time:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.allowancetime}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Total
+                            Time:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.totaltime}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Components
+                            User:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.componentsuser}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Tools
+                            Required:<span
+                                    class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.toolsrequired}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Inspection
+                            Center:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.inspectioncenter}}
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-3 control-label">Exception
+                            Msg:<span class="vd_red">*</span></label>
+                        <div class="col-sm-4 controls">
+                            {{OperationSequenceForms.exceptionmsg}}
+                        </div>
+                    </div>
+                    <div class="wrapper" style="text-align: center">
+                        <button type="submit" class="btn btn-primary ">Add <span
+                                class="menu-icon"><i
+                                class="fa fa-fw fa-chevron-circle-right"></i></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+
+    setTimeout(() => {
+        document.getElementById("mass-sub").remove()
+    }, 3000)
+
+</script>
+
+
+{% endblock %}

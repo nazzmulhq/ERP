@@ -1,0 +1,11 @@
+<script>
+    document.getElementById('id_pur_or_prd').onchange = function () {
+        if (this.value === 'Production Date') {
+            document.getElementById('pur_or_prd_date').innerText = `${this.value}`
+        } else if (this.value === '') {
+            document.getElementById('pur_or_prd_date').innerText = `Date:`
+        } else {
+            document.getElementById('pur_or_prd_date').innerText = `${this.value}`
+        }
+    }
+</script>
